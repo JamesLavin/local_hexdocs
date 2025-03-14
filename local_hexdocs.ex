@@ -8,9 +8,7 @@ defmodule LocalHexdocs do
       and/or remove libraries by either deleting them or commenting them out with a leading "#"
   """
 
-  def mix_path do
-    :os.cmd(~c(which mix)) |> Path.expand() |> String.trim()
-  end
+  @mix_path :os.cmd(~c(which mix)) |> Path.expand() |> String.trim()
 
   def libraries do
     "default_libraries.txt"
@@ -25,8 +23,10 @@ defmodule LocalHexdocs do
   def fetch_all do
     stream =
       libraries()
-      |> Task.async_stream(fn lib -> :os.cmd(~c(#{mix_path()} hex.docs fetch #{lib})) end)
+      |> Task.async_stream(fn lib -> :os.cmd(~c(#{@mix_path} hex.docs fetch #{lib})) end)
 
+    # {:ok, ~c"Docs already fetched: /home/mateusz/.hex/docs/hexpm/mox/1.2.0\n"}
+    # {:ok, ~c"Docs fetched: /home/mateusz/.hex/docs/hexpm/paginator/1.2.0\n"}
     Enum.each(stream, fn resp -> IO.inspect(resp) end)
   end
 

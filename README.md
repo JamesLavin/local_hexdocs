@@ -76,3 +76,8 @@ Updating your local Hexdocs documentation is as simple as re-running the `elixir
 Each time you run this, `LocalHexdocs` will pull the latest version of documentation for each specified library.
 
 If you want to ensure you always have the latest documentation, you might create a cron job to periodically run `elixir save_hexdocs.ex`.
+
+## Author
+
+`LocalHexdocs` was created by James Lavin.
+

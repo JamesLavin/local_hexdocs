@@ -10,9 +10,11 @@ Before you can run `LocalHexdocs`, you must run `git clone` to download this rep
 
 ```
 git clone git@github.com:JamesLavin/local_hexdocs.git
+```
 
-# OR
+OR
 
+```
 git clone https://github.com/JamesLavin/local_hexdocs.git
 ```
 

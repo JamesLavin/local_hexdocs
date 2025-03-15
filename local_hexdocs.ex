@@ -14,9 +14,9 @@ defmodule LocalHexdocs do
 
   # TODO: Handle response: "** (Mix) No package with name table_raw"
 
-  # TODO: Stream output, rather than wait till the long script is nearly done
-
   # TODO: Sort libraries before displaying them?
+
+  # TODO: Convert "amqp_client/4.0.3" to "amqp_client (4.0.3)"
 
   @mix_path :os.cmd(~c(which mix)) |> Path.expand() |> String.trim()
 
@@ -36,12 +36,15 @@ defmodule LocalHexdocs do
       desired_libraries()
       |> Task.async_stream(fn lib -> :os.cmd(~c(#{@mix_path} hex.docs fetch #{lib})) end)
 
+    # {:ok, ~c"** (Mix) No package with name made_up_library\n"}
     # {:ok, ~c"Docs already fetched: /home/mateusz/.hex/docs/hexpm/mox/1.2.0\n"}
     # {:ok, ~c"Docs fetched: /home/mateusz/.hex/docs/hexpm/paginator/1.2.0\n"}
     stream
+    |> Stream.each(fn {:ok, charlist} -> charlist |> to_string() |> IO.inspect() end)
     |> Enum.to_list()
     |> process_list()
     |> IO.inspect(limit: :infinity, printable_limit: :infinity)
+    |> dbg()
   end
 
   defp libraries_file do

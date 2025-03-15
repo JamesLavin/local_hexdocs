@@ -28,7 +28,7 @@ defmodule LocalHexdocs do
       |> Enum.reject(&is_nil(&1))
       |> Enum.reject(& &1 == "")
       |> Enum.reject(& String.starts_with?(&1, "#"))
-      # |> Enum.take(5)
+      # |> Enum.take(10)
   end
 
   def fetch_all do
@@ -40,11 +40,11 @@ defmodule LocalHexdocs do
     # {:ok, ~c"Docs already fetched: /home/mateusz/.hex/docs/hexpm/mox/1.2.0\n"}
     # {:ok, ~c"Docs fetched: /home/mateusz/.hex/docs/hexpm/paginator/1.2.0\n"}
     stream
-    |> Stream.each(fn {:ok, charlist} -> charlist |> to_string() |> IO.inspect() end)
+    |> Stream.each(fn {:ok, charlist} -> charlist |> to_string() |> String.trim() |> String.replace("** (Mix) ", "") |> IO.inspect() end)
     |> Enum.to_list()
     |> process_list()
     |> IO.inspect(limit: :infinity, printable_limit: :infinity)
-    |> dbg()
+    # |> dbg()
   end
 
   defp libraries_file do
@@ -54,12 +54,20 @@ defmodule LocalHexdocs do
   end
 
   defp process_list(list) when is_list(list) do
+    base_map = %{"Docs already fetched" => [], "Docs fetched" => [], "No package with name" => []}
+
     list
     |> Enum.map(&convert_response/1)
     |> Enum.group_by(&List.first/1)
-    |> (fn grouped -> Map.merge(%{"Docs already fetched" => [], "Docs fetched" => []}, grouped) end).()
+    |> (fn grouped -> Map.merge(base_map, grouped) end).()
     |> Map.update!("Docs already fetched", fn list -> Enum.map(list, &List.last/1) |> Enum.map(&String.split(&1, "/hexpm/")) |> Enum.map(&List.last/1) end)
     |> Map.update!("Docs fetched", fn list -> Enum.map(list, &List.last/1) |> Enum.map(&String.split(&1, "/hexpm/")) |> Enum.map(&List.last/1) end)
+    |> Map.update!("No package with name", fn list -> Enum.map(list, &List.last/1) end)
+  end
+
+  defp convert_response({:ok, ~c"** (Mix) No package with name " ++ package_name}) do
+    package_name = package_name |> to_string() |> String.trim()
+    ["No package with name", package_name]
   end
 
   defp convert_response({:ok, charlist}) when is_list(charlist) do

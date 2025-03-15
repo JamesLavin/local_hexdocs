@@ -12,7 +12,7 @@ defmodule LocalHexdocs do
       file and have it persist across Git updates.
   """
 
-  # TODO: Handle response: "** (Mix) No package with name table_raw"
+  # TODO: Handle response: "Couldn't find docs for package with name cqerl or version 2.1.3"
 
   # TODO: Sort libraries before displaying them?
 

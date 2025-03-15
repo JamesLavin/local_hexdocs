@@ -6,7 +6,14 @@
 
 ### Pulling down this repository
 
+Before you can run `LocalHexdocs`, you must run `git clone` to download this repository. (Alternatively, you could manually copy the files from https://github.com/JamesLavin/local_hexdocs without downloading the repository, but pulling any future changes would be harder.)
+
 ```
+git clone git@github.com:JamesLavin/local_hexdocs.git
+
+# OR
+
+git clone https://github.com/JamesLavin/local_hexdocs.git
 ```
 
 ### Specifying Hexdocs libraries you want to save locally

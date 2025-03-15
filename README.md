@@ -20,11 +20,13 @@ git clone https://github.com/JamesLavin/local_hexdocs.git
 
 ### Specifying Hexdocs libraries you want to save locally
 
-After pulling down this repository, the next step is going into the top directory of this repository and specifying which Elixir libraries you wish to pull documentation for.
+After pulling down this repository, the next step is `cd`-ing into the top directory of this repository and specifying which Elixir libraries you wish to pull documentation for.
 
 If you do nothing, running `elixir save_hexdocs.ex` in this directory will download all Hexdoc files listed in the provided `default_libraries.txt`.
 
-You can modify `default_libraries.txt` to add, remove, or comment out libraries (with a leading "#"), but this may make it hard to update this project in the future, so we recommend that you copy `default_libraries.txt` to a new `libraries.txt` file and modify that. `libraries.txt` is listed in `.gitignore`, so updating this repository will not touch that file. You can safely make it your own.
+You can modify `default_libraries.txt` to add, remove, or comment out (with a leading "#") libraries, but this may make it hard to update this project in the future, so we recommend that you copy `default_libraries.txt` to a new `libraries.txt` file and modify that.
+
+`libraries.txt` is listed in `.gitignore`, so updating this repository will not touch that file. You can safely make it your own.
 
 ### Running `LocalHexdocs`
 
@@ -35,6 +37,28 @@ elixir save_hexdocs.ex
 ```
 
 (I didn't bother creating an executable binary since anyone wanting to download Hexdocs probably already has Elixir installed.)
+
+You will see a stream of output, with one line per library. Each should say one of the following:
+
+* "Docs fetched: /home/mateusz/.hex/docs/hexpm/scholar/0.4.0"
+* "No package with name made_up_library"
+* "Docs already fetched: /home/mateusz/.hex/docs/hexpm/sobelow/0.13.0"
+
+At the end, you should see an Elixir map with three keys, each with a list of library names, like:
+
+```
+%{
+  "Docs already fetched" => ["amqp/4.0.0", "amqp_client/4.0.3", "axon/0.7.0",
+   "bamboo/2.4.0", "bamboo_phoenix/1.0.0", "bamboo_smtp/4.2.2", "bandit/1.6.8",
+   "bcrypt_elixir/3.2.1", "benchee/1.3.1", "bodyguard/2.4.3", "broadway/1.2.1",
+   ...
+   "vega_lite/0.1.11", "vix/0.33.0", "wallaby/0.30.10", "websock/0.5.3",
+   "websock_adapter/0.5.8", "xla/0.8.0", "yamerl/0.10.0", "yaml_elixir/2.11.0",
+   "zigler/0.13.3"],
+  "Docs fetched" => ["live_svelte/0.15.0", "req/0.5.8", "sobelow/0.13.0"],
+  "No package with name" => ["made_up_library", "not_real"]
+}
+```
 
 ### Serving & viewing your local Hexdocs files
 

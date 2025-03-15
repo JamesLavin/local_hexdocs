@@ -6,7 +6,17 @@ defmodule LocalHexdocs do
       documentation to your local computer
     * You can modify `default_libraries.txt` and make it your own. You can add additional libraries
       and/or remove libraries by either deleting them or commenting them out with a leading "#"
+    * You can create your own `libraries.txt` file in the main directory with any libraries in it
+      that you wish to include, and this file will be used instead of `default_libraries.txt`.
+      `libraries.txt` is included in `.gitignore`, so you should be able to safely modify your
+      file and have it persist across Git updates.
   """
+
+  # TODO: Handle response: "** (Mix) No package with name table_raw"
+
+  # TODO: Stream output, rather than wait till the long script is nearly done
+
+  # TODO: Sort libraries before displaying them?
 
   @mix_path :os.cmd(~c(which mix)) |> Path.expand() |> String.trim()
 
@@ -31,7 +41,7 @@ defmodule LocalHexdocs do
     stream
     |> Enum.to_list()
     |> process_list()
-    |> IO.inspect()
+    |> IO.inspect(limit: :infinity, printable_limit: :infinity)
   end
 
   defp libraries_file do

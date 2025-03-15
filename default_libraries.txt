@@ -208,7 +208,7 @@ stripity_stripe
 swarm
 swoosh
 swoosh_gallery
-table_raw
+table_rex
 tailwind
 telemetry
 telemetry_metrics

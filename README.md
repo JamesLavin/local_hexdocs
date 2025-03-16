@@ -46,14 +46,46 @@ git pull origin main
 
 After pulling down this repository, the next step is `cd`-ing into the top directory of this repository and specifying which Elixir packages you wish to pull documentation for.
 
-If you do nothing, running `elixir save_hexdocs.ex` in this directory will download all Hexdoc files listed in the provided `default_packages.txt`.
+If you do nothing, running `elixir save_hexdocs.ex` in this directory will download all Hexdoc files for packages listed in the provided `default_packages.txt`. (There's nothing magical about `default_packages.txt`, which was simply my initial list of desired packages.)
 
 You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") packages, but this may make it hard to update this project in the future, so we recommend that you:
 
-1) Create a `packages` subdirectory by running `mkdir packages`
-2) Copy `popular_packages.txt` and/or `default_packages.txt` to a new `packages.txt` file -- `cp popular_packages.txt packages/popular_packages.txt` or `cp default_packages.txt packages/packages.txt` -- and modify that. Or create your own file within `/packages`. All packages names (one per line) in all files in the `/packages` directory will be merged into a list of packages to pull documentation for. You can create multiple files, and it's fine if the same package appears more than once. Again, each package name should be listed on its own line.
+1) Create a `/packages` subdirectory by running `mkdir packages`
+
+2) Create at least one file within `/packages` containing at least one package name
+
+You can create a new file (with any name you desire) inside `/packages` and/or you can copy `popular_packages.txt` and/or `default_packages.txt` to the `/packages` subdirectory. For example:
+
+```
+cp popular_packages.txt packages/popular_packages.txt
+```
+or
+```
+cp default_packages.txt packages/packages.txt
+```
+
+It doesn't matter whether you create your own file(s) or copy files from elsewhere.
+
+You can name these files anything you want. All files in the `/packages` directory will be used.
+
+You can modify the files' content by adding/removing package names (one package per line) and/or adding comments (starting with #"). For example:
+
+`my_packages.txt`:
+```
+# This is my list of packages
+elixir
+gleam
+phoenix
+phoenix_live_view
+ecto
+ex_aws_s3
+```
+
+All packages names (one per line) in all files in the `/packages` directory will be merged into a list of packages to pull documentation for. You can create multiple files, and it's fine if the same package appears more than once, as we de-duplicate before pulling. Again, each package name should be listed on its own line.
 
 You don't need to create a separate `/packages` subdirectory, but we recommend doing so.
+
+If you don't create a `/packages` directory, only `default_packages.txt` or `packages.txt` will be used from the top-level directory. All other files will be ignored as a source of package names.
 
 `packages/*` and `packages.txt` are listed in `.gitignore`, so updating this repository will not modify/delete your `./packages.txt` file or any files you save in `packages/`. You can safely customize them and make them your own.
 

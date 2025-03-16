@@ -191,14 +191,13 @@ If you want to ensure you always have the latest documentation, you might create
 
 * Avoid triggering rate limits
 * If this triggers a rate limit, stop trying to pull
-* Option for loading only the top-N popular packages from popular_packages.txt
+* Option to load only the top-N popular packages from `popular_packages.txt`
 * Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"
-* De-duplicate & sort packages before processing/displaying them?
 * Command for removing documentation of outdated package versions
 * Option for automatically removing documentation of outdated package versions
 * Display "amqp_client/4.0.3" as "amqp_client (4.0.3)"?
-* Sample popular_packages.txt with top N packages in https://hex.pm/packages?
-* Sample awesome_packages.txt with all packages in https://github.com/h4cc/awesome-elixir?
+* Regularly update `popular_packages.txt` from current https://hex.pm/packages
+* Create `awesome_packages.txt` package list containing all packages in https://github.com/h4cc/awesome-elixir?
 
 ## Author
 

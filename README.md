@@ -93,6 +93,14 @@ Each time you run this, `LocalHexdocs` will pull the latest version of documenta
 
 If you want to ensure you always have the latest documentation, you might create a cron job to periodically run `elixir save_hexdocs.ex`.
 
+## Possible future features
+
+* Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"
+* De-duplicate & sort libraries before processing/displaying them?
+* Display "amqp_client/4.0.3" as "amqp_client (4.0.3)"?
+* Sample popular_libraries.txt with top N libraries in https://hex.pm/packages?
+* Sample awesome_libraries.txt with all libraries in https://github.com/h4cc/awesome-elixir?
+
 ## Author
 
 `LocalHexdocs` was created by James Lavin.

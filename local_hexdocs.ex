@@ -12,6 +12,8 @@ defmodule LocalHexdocs do
       file and have it persist across Git updates.
   """
 
+  @timeout_ms 30_000
+
   # TODO: Handle response: "Couldn't find docs for package with name cqerl or version 2.1.3"
 
   # TODO: Sort libraries before displaying them?
@@ -34,7 +36,7 @@ defmodule LocalHexdocs do
   def fetch_all do
     stream =
       desired_libraries()
-      |> Task.async_stream(fn lib -> :os.cmd(~c(#{@mix_path} hex.docs fetch #{lib})) end)
+      |> Task.async_stream(fn lib -> :os.cmd(~c(#{@mix_path} hex.docs fetch #{lib})) end, timeout: @timeout_ms)
 
     # {:ok, ~c"** (Mix) No package with name made_up_library\n"}
     # {:ok, ~c"Docs already fetched: /home/mateusz/.hex/docs/hexpm/mox/1.2.0\n"}

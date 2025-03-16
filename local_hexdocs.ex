@@ -12,6 +12,10 @@ defmodule LocalHexdocs do
       file and have it persist across Git updates.
   """
 
+  # Number of parallel threads used to pull documentation. The higher this number,
+  # the greater the load placed on `hexdocs.pm` and the greater your odds of getting rate limited
+  @max_concurrency 1
+
   @timeout_ms 30_000
 
   @mix_path :os.cmd(~c(which mix)) |> Path.expand() |> String.trim()
@@ -37,14 +41,16 @@ defmodule LocalHexdocs do
   def fetch_all do
     stream =
       desired_packages()
-      |> Task.async_stream(fn lib -> :os.cmd(~c(#{@mix_path} hex.docs fetch #{lib})) end, timeout: @timeout_ms)
+      |> Task.async_stream(fn lib -> :os.cmd(~c(#{@mix_path} hex.docs fetch #{lib})) end, timeout: @timeout_ms, max_concurrency: @max_concurrency)
 
     # Expected responses:
+    # "Failed to retrieve package information\nAPI rate limit exceeded for IP [my IP address]\n** (MatchError) no match of right hand side value: nil\n    (hex 2.1.1) lib/mix/tasks/hex.docs.ex:135: Mix.Tasks.Hex.Docs.find_package_latest_version/2\n    (hex 2.1.1) lib/mix/tasks/hex.docs.ex:99: Mix.Tasks.Hex.Docs.fetch_docs/2\n    (mix 1.17.3) lib/mix/task.ex:495: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.17.3) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /home/mateusz/.asdf/installs/elixir/1.17.3-otp-27/bin/mix:2: (file)"
     # {:ok, ~c"** (Mix) No package with name made_up_library\n"}
     # {:ok, ~c"Docs already fetched: /home/mateusz/.hex/docs/hexpm/mox/1.2.0\n"}
     # {:ok, ~c"Docs fetched: /home/mateusz/.hex/docs/hexpm/paginator/1.2.0\n"}
 
     stream
+    |> Stream.take_while(fn resp -> elem(resp, 0) == :ok && !String.match?(elem(resp, 1) |> to_string(), ~r/rate limit exceeded for IP /) end)
     |> Stream.each(fn {:ok, charlist} -> charlist |> to_string() |> String.trim() |> String.replace("** (Mix) ", "") |> IO.inspect() end)
     |> Enum.to_list()
     |> process_list()

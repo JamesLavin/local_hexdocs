@@ -17,8 +17,10 @@ defmodule LocalHexdocs do
   @mix_path :os.cmd(~c(which mix)) |> Path.expand() |> String.trim()
 
   def desired_packages do
-    packages_file()
-    |> extract_packages()
+    [packages_file()]
+    |> Enum.flat_map(&extract_packages/1)
+    |> Enum.sort()
+    |> Enum.uniq()
   end
 
   defp extract_packages(filepath) do

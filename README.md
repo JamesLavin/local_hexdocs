@@ -193,6 +193,8 @@ If you want to ensure you always have the latest documentation, you might create
 
 ## Possible future features
 
+* Function for listing all packages with downloaded documentation
+* Function for listing all desired packages without downloaded documentation
 * Option to load only the top-N popular packages from `popular_packages.txt`
 * Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"
 * Command for removing documentation of outdated package versions

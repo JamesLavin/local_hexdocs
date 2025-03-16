@@ -115,10 +115,11 @@ You will see a stream of output, with one line per library. Each should say one 
 * "No package with name made_up_library"
 * "Docs already fetched: /home/mateusz/.hex/docs/hexpm/sobelow/0.13.0"
 
-At the end, you should see an Elixir map with three keys, each with a list of library names, like:
+At the end, you should see an Elixir map with four keys, each with a list of library names, like:
 
 ```
 %{
+  "Couldn't find docs" => ["coveralls", "cowboy", "iconv", "luerl", "stun"],
   "Docs already fetched" => ["amqp/4.0.0", "amqp_client/4.0.3", "axon/0.7.0",
    "bamboo/2.4.0", "bamboo_phoenix/1.0.0", "bamboo_smtp/4.2.2", "bandit/1.6.8",
    "bcrypt_elixir/3.2.1", "benchee/1.3.1", "bodyguard/2.4.3", "broadway/1.2.1",

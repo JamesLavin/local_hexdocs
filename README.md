@@ -87,9 +87,9 @@ ecto
 ex_aws_s3
 ```
 
-All packages names (one per line) in all files in the `/packages` directory will be merged into a list of packages to pull documentation for. You can create multiple files, and it's fine if the same package appears more than once, as we de-duplicate before pulling. Again, each package name should be listed on its own line.
+All package names (one per line) in all files in the `/packages` directory will be merged into a list of packages to pull documentation for. You can create multiple files, and it's fine if the same package appears more than once, as we de-duplicate before pulling. Again, each package name should be listed on its own line.
 
-You don't need to create a separate `/packages` subdirectory, but we recommend doing so.
+We recommend creating a `/packages` subdirectory, but you can instead create a `packages.txt` file in the top-level directory or rely on `default_packages.txt`.
 
 If you don't create a `/packages` directory, only `default_packages.txt` or `packages.txt` will be used from the top-level directory. All other files will be ignored as a source of package names.
 

@@ -81,6 +81,7 @@ defmodule LocalHexdocs do
     |> Enum.map(&convert_response/1)
     |> Enum.group_by(&List.first/1)
     |> (fn grouped -> Map.merge(base_map, grouped) end).()
+    |> Map.update!("Couldn't find docs", fn list -> Enum.map(list, &List.last/1) end)
     |> Map.update!("Docs already fetched", fn list -> Enum.map(list, &List.last/1) |> Enum.map(&String.split(&1, "/hexpm/")) |> Enum.map(&List.last/1) end)
     |> Map.update!("Docs fetched", fn list -> Enum.map(list, &List.last/1) |> Enum.map(&String.split(&1, "/hexpm/")) |> Enum.map(&List.last/1) end)
     |> Map.update!("No package with name", fn list -> Enum.map(list, &List.last/1) end)

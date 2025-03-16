@@ -11,6 +11,7 @@ elixir save_hexdocs.ex
 Once downloaded, you can:
 * [View your documents using the Caddy file server or something similar](#serving--viewing-your-local-hexdocs-files)
 * [Search your documents using `grep` or something similar](#searching-through-your-local-hexdocs-files)
+* [List your downloaded packages](#listing-hex-packages-with-downloaded-documentation)
 
 ## Runs on Linux & Mac. Untested on Windows
 
@@ -180,6 +181,14 @@ $ grep -rl "JOSE" ~/.hex/docs/hexpm
 ...
 ```
 
+### Listing Hex packages with downloaded documentation
+
+To view a list of all Hex packages with downloaded Hexdocs, run:
+
+```
+elixir list_hexdocs.ex
+```
+
 ### Updating your Hexdocs documentation
 
 Updating your local Hexdocs documentation is as simple as re-running:
@@ -195,7 +204,8 @@ If you want to ensure you always have the latest documentation, you might create
 ## Possible future features
 
 * Handle "** (MatchError) no match of right hand side value: {:error, :eacces}\n    (hex 2.0.6) lib/mix/tasks/hex.docs.ex:377: Mix.Tasks.Hex.Docs.extract_docs/2\n    (mix 1.16.1) lib/mix/task.ex:478: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.16.1) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /Users/jameslavin/.asdf/installs/elixir/1.16.1-otp-26/bin/mix:2: (file)"
-* Function for listing all packages with downloaded documentation
+* Instead of having separate commands like `elixir list_hexdocs.ex` and `elixir save_hexdocs.ex`, create a unified command-line API
+* `elixir list_hexdocs.ex` could display (perhaps optionally) the individual and total size of downloaded documentation
 * Function for listing all desired packages without downloaded documentation
 * Option to load only the top-N popular packages from `popular_packages.txt`
 * Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"

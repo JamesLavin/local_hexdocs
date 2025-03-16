@@ -20,6 +20,17 @@ defmodule LocalHexdocs do
 
   @mix_path :os.cmd(~c(which mix)) |> Path.expand() |> String.trim()
 
+  defp hexpm_dir do
+    "~/.hex/docs/hexpm/" |> Path.expand()
+  end
+
+  def downloaded_packages do
+    hexpm_dir()
+    |> File.ls!()
+    |> Enum.sort()
+    |> IO.inspect(label: "Packages downloaded in #{hexpm_dir()}", limit: :infinity, printable_limit: :infinity)
+  end
+
   def desired_packages do
     packages_files()
     |> Enum.flat_map(&extract_packages/1)
@@ -116,10 +127,6 @@ defmodule LocalHexdocs do
     |> String.trim()
     |> String.replace("** (Mix) ", "")
     |> IO.inspect()
-  end
-
-  # IMPROVE
-  def downloaded_packages do
   end
 
   # IMPROVE

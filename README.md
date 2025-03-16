@@ -6,9 +6,17 @@ List your desired Elixir packages in a `packages.txt` file (in either this proje
 
 You can view your documents using the [Caddy](https://caddyserver.com) file server or something similar.
 
-## Disclaimers
+## Runs on Linux & Mac. Untested on Windows
 
 I have tested this library on my own Linux and Mac machines but own no Windows machines and am unable to test on Windows.
+
+## Missing feature: Rate-limiting
+
+During development and testing on 2025-03-16, I hit the following, which I need to think through.
+
+```
+"Failed to retrieve package information\nAPI rate limit exceeded for IP [IP address]\n** (MatchError) no match of right hand side value: nil\n
+```
 
 ## Usage
 
@@ -143,6 +151,8 @@ If you want to ensure you always have the latest documentation, you might create
 
 ## Possible future features
 
+* Avoid triggering rate limits
+* If this triggers a rate limit, stop trying to pull
 * Option for loading only the top-N popular packages from popular_packages.txt
 * Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"
 * De-duplicate & sort packages before processing/displaying them?

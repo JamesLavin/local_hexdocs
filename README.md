@@ -16,13 +16,17 @@ Once downloaded, you can:
 
 I have tested this library on my own Linux and Mac machines but own no Windows machines and am unable to test on Windows.
 
-## Missing feature: Rate-limiting
+## Performance & rate-limiting
 
-During development and testing on 2025-03-16, I hit the following, which I need to think through.
+During development and testing on 2025-03-16, performance was great until I hit the following:
 
 ```
 "Failed to retrieve package information\nAPI rate limit exceeded for IP [IP address]\n** (MatchError) no match of right hand side value: nil\n
 ```
+
+I decided to remove parallelization -- by setting `@max_concurrency` to just 1 -- to avoid overloading `hexdocs.pm` and to reduce the risk of getting rate-limited.
+
+You can obviously change this module attribute to parallelize processing, but I'm not providing a configuration option for this to avoid pounding the `hexdocs.pm` server. Downloading documentation isn't something you need to happen instantaneously. Let's please be appreciative of and nice to our beloved `hexdocs.pm` server!
 
 ## Usage
 
@@ -189,8 +193,6 @@ If you want to ensure you always have the latest documentation, you might create
 
 ## Possible future features
 
-* Avoid triggering rate limits
-* If this triggers a rate limit, stop trying to pull
 * Option to load only the top-N popular packages from `popular_packages.txt`
 * Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"
 * Command for removing documentation of outdated package versions
@@ -198,6 +200,7 @@ If you want to ensure you always have the latest documentation, you might create
 * Display "amqp_client/4.0.3" as "amqp_client (4.0.3)"?
 * Regularly update `popular_packages.txt` from current https://hex.pm/packages
 * Create `awesome_packages.txt` package list containing all packages in https://github.com/h4cc/awesome-elixir?
+* Can more be done to further avoid pounding `hexdocs.pm` and avoid triggering rate limiting?
 
 ## Author
 

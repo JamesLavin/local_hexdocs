@@ -193,6 +193,7 @@ If you want to ensure you always have the latest documentation, you might create
 
 ## Possible future features
 
+* Handle "** (MatchError) no match of right hand side value: {:error, :eacces}\n    (hex 2.0.6) lib/mix/tasks/hex.docs.ex:377: Mix.Tasks.Hex.Docs.extract_docs/2\n    (mix 1.16.1) lib/mix/task.ex:478: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.16.1) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /Users/jameslavin/.asdf/installs/elixir/1.16.1-otp-26/bin/mix:2: (file)"
 * Function for listing all packages with downloaded documentation
 * Function for listing all desired packages without downloaded documentation
 * Option to load only the top-N popular packages from `popular_packages.txt`

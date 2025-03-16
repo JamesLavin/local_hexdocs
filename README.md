@@ -43,15 +43,15 @@ If you do nothing, running `elixir save_hexdocs.ex` in this directory will downl
 You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") packages, but this may make it hard to update this project in the future, so we recommend that you:
 
 1) Create a `packages` subdirectory by running `mkdir packages`
-2) Copy `popular_packages.txt` or `default_packages.txt` to a new `packages.txt` file -- `cp popular_packages.txt packages/popular_packages.txt` or `cp default_packages.txt packages/packages.txt` -- and modify that.
+2) Copy `popular_packages.txt` or `default_packages.txt` to a new `packages.txt` file -- `cp popular_packages.txt packages/popular_packages.txt` or `cp default_packages.txt packages/packages.txt` -- and modify that. Or create your own file within `/packages` with a `.txt` extension. All packages names (one per line) in all files with a `.txt` extension in the `/packages` directory will be merged into a list of packages to pull documentation for. You can create multiple files, and it's fine if the same package appears more than once.
 
-You don't need to create a separate `/packages` subdirectory, but we recommend doing so. We intend to enable you to place multiple files inside `/packages` and `LocalHexdocs` will pull documentation for all packages listed in all files within the `/packages` subdirectory.
+You don't need to create a separate `/packages` subdirectory, but we recommend doing so.
 
-`packages/*` and `packages.txt` are listed in `.gitignore`, so updating this repository will not touch `./packages.txt` or anything in `packages/`. You can safely make customize them and make them your own.
+`packages/*` and `packages.txt` are listed in `.gitignore`, so updating this repository will not modify/delete your `./packages.txt` file or any files you save in `packages/`. You can safely customize them and make them your own.
 
 ### Running `LocalHexdocs`
 
-Once you're happy with your `packages.txt` file, you can run this script to pull down the latest documentation for each library with this command, executed from the main directory :
+Once you're happy with your package configuration (whether you choose to create a `packages.txt` file or `/packages/*.txt` files or use the `default_packages.txt` file), you can run this script to pull down the latest documentation for each library with this command, executed from the main directory :
 
 ```
 elixir save_hexdocs.ex
@@ -141,7 +141,6 @@ If you want to ensure you always have the latest documentation, you might create
 
 * Option for loading only the top-N popular packages from popular_packages.txt
 * Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"
-* Concat, sort, de-dupe, and pull docs for all packages listed in all files within the `/packages` subdirectory
 * De-duplicate & sort packages before processing/displaying them?
 * Display "amqp_client/4.0.3" as "amqp_client (4.0.3)"?
 * Sample popular_packages.txt with top N packages in https://hex.pm/packages?

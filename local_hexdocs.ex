@@ -17,7 +17,7 @@ defmodule LocalHexdocs do
   @mix_path :os.cmd(~c(which mix)) |> Path.expand() |> String.trim()
 
   def desired_packages do
-    [packages_file()]
+    packages_files()
     |> Enum.flat_map(&extract_packages/1)
     |> Enum.sort()
     |> Enum.uniq()
@@ -49,6 +49,14 @@ defmodule LocalHexdocs do
     |> Enum.to_list()
     |> process_list()
     |> IO.inspect(limit: :infinity, printable_limit: :infinity)
+  end
+
+  defp packages_files do
+    case Path.expand(".") |> Path.join("/packages") |> File.ls() do
+     {:ok, []} -> packages_file()
+     {:ok, user_files} -> user_files |> Enum.map(fn filename -> Path.join(Path.expand("./packages"), filename) end)
+     {:error, _err} -> packages_file()
+    end
   end
 
   # Use packages.txt if it exists or default_packages.txt otherwise

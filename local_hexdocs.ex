@@ -1,14 +1,14 @@
 defmodule LocalHexdocs do
 
   @moduledoc """
-  You have three options for choosing libraries whose documentation you wish to save locally:
-    * You can use the existing `default_libraries.txt` as is. This will save ALL those libraries'
+  You have three options for choosing packages whose documentation you wish to save locally:
+    * You can use the existing `default_packages.txt` as is. This will save ALL those packages'
       documentation to your local computer
-    * You can modify `default_libraries.txt` and make it your own. You can add additional libraries
-      and/or remove libraries by either deleting them or commenting them out with a leading "#"
-    * You can create your own `libraries.txt` file in the main directory with any libraries in it
-      that you wish to include, and this file will be used instead of `default_libraries.txt`.
-      `libraries.txt` is included in `.gitignore`, so you should be able to safely modify your
+    * You can modify `default_packages.txt` and make it your own. You can add additional packages
+      and/or remove packages by either deleting them or commenting them out with a leading "#"
+    * You can create your own `packages.txt` file in the main directory with any packages in it
+      that you wish to include, and this file will be used instead of `default_packages.txt`.
+      `packages.txt` is included in `.gitignore`, so you should be able to safely modify your
       file and have it persist across Git updates.
   """
 
@@ -16,20 +16,25 @@ defmodule LocalHexdocs do
 
   @mix_path :os.cmd(~c(which mix)) |> Path.expand() |> String.trim()
 
-  def desired_libraries do
-    libraries_file()
-      |> File.read!()
-      |> String.split("\n")
-      |> Enum.map(&String.trim/1)
-      |> Enum.reject(&is_nil(&1))
-      |> Enum.reject(& &1 == "")
-      |> Enum.reject(& String.starts_with?(&1, "#"))
-      # |> Enum.take(10)
+  def desired_packages do
+    packages_file()
+    |> extract_packages()
+  end
+
+  defp extract_packages(filepath) do
+    filepath
+    |> File.read!()
+    |> String.split("\n")
+    |> Enum.map(&String.trim/1)
+    |> Enum.reject(&is_nil(&1))
+    |> Enum.reject(& &1 == "")
+    |> Enum.reject(& String.starts_with?(&1, "#"))
+    # |> Enum.take(10)
   end
 
   def fetch_all do
     stream =
-      desired_libraries()
+      desired_packages()
       |> Task.async_stream(fn lib -> :os.cmd(~c(#{@mix_path} hex.docs fetch #{lib})) end, timeout: @timeout_ms)
 
     # Expected responses:
@@ -44,8 +49,9 @@ defmodule LocalHexdocs do
     |> IO.inspect(limit: :infinity, printable_limit: :infinity)
   end
 
-  defp libraries_file do
-    ["libraries.txt", "default_libraries.txt"]
+  # Use packages.txt if it exists or default_packages.txt otherwise
+  defp packages_file do
+    ["packages/packages.txt", "packages.txt", "default_packages.txt"]
     |> Enum.find(fn file -> Path.join(File.cwd!(), file) |> File.exists?() end)
     |> Path.expand()
   end
@@ -75,10 +81,10 @@ defmodule LocalHexdocs do
   end
 
   # IMPROVE
-  def downloaded_libraries do
+  def downloaded_packages do
   end
 
   # IMPROVE
-  def missing_libraries do
+  def missing_packages do
   end
 end

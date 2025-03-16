@@ -1,6 +1,8 @@
-
+made_up_library
+cqerl
 amqp
 amqp_client
+not_real
 axon
 bamboo
 bamboo_phoenix
@@ -78,6 +80,7 @@ gleam_stdlib
 goth
 hammer
 hammer_plug
+hex
 hex_core
 horde
 html_entities

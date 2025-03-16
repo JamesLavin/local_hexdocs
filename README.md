@@ -1,8 +1,8 @@
 # LocalHexdocs
 
-`LocalHexdocs` is a simple Elixir script allowing you to easily save and update [Hexdocs](https://hexdocs.pm/) files locally on your machine so you always have the most recent documentation for any Elixir, Gleam, or Erlang libraries you might want to view.
+`LocalHexdocs` is a simple Elixir script allowing you to easily save and update [Hexdocs](https://hexdocs.pm/) files locally on your machine so you always have the most recent documentation for any Elixir, Gleam, or Erlang packages you might want to view.
 
-List your desired Elixir libraries in a `libraries.txt` file, then run `elixir save_hexdocs.ex` to pull down the lastest Hexdocs for all libraries to your local machine.
+List your desired Elixir packages in a `packages.txt` file, then run `elixir save_hexdocs.ex` to pull down the lastest Hexdocs for all packages to your local machine.
 
 You can view your documents using the [Caddy File Server](https://caddyserver.com) or something similar.
 
@@ -34,19 +34,19 @@ To pull future `LocalHexdocs` updates, cd into this repository and run:
 git pull origin main
 ```
 
-### Specifying Hexdocs libraries you want to save locally
+### Specifying Hexdocs packages you want to save locally
 
-After pulling down this repository, the next step is `cd`-ing into the top directory of this repository and specifying which Elixir libraries you wish to pull documentation for.
+After pulling down this repository, the next step is `cd`-ing into the top directory of this repository and specifying which Elixir packages you wish to pull documentation for.
 
-If you do nothing, running `elixir save_hexdocs.ex` in this directory will download all Hexdoc files listed in the provided `default_libraries.txt`.
+If you do nothing, running `elixir save_hexdocs.ex` in this directory will download all Hexdoc files listed in the provided `default_packages.txt`.
 
-You can modify `default_libraries.txt` to add, remove, or comment out (with a leading "#") libraries, but this may make it hard to update this project in the future, so we recommend that you copy `default_libraries.txt` to a new `libraries.txt` file and modify that.
+You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") packages, but this may make it hard to update this project in the future, so we recommend that you copy `default_packages.txt` to a new `packages.txt` file and modify that.
 
-`libraries.txt` is listed in `.gitignore`, so updating this repository will not touch that file. You can safely make it your own.
+`packages.txt` is listed in `.gitignore`, so updating this repository will not touch that file. You can safely make it your own.
 
 ### Running `LocalHexdocs`
 
-Once you're happy with your `libraries.txt` file, you can run this script to pull down the latest documentation for each library with this command, executed from the main directory :
+Once you're happy with your `packages.txt` file, you can run this script to pull down the latest documentation for each library with this command, executed from the main directory :
 
 ```
 elixir save_hexdocs.ex
@@ -96,10 +96,10 @@ If you want to ensure you always have the latest documentation, you might create
 ## Possible future features
 
 * Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"
-* De-duplicate & sort libraries before processing/displaying them?
+* De-duplicate & sort packages before processing/displaying them?
 * Display "amqp_client/4.0.3" as "amqp_client (4.0.3)"?
-* Sample popular_libraries.txt with top N libraries in https://hex.pm/packages?
-* Sample awesome_libraries.txt with all libraries in https://github.com/h4cc/awesome-elixir?
+* Sample popular_packages.txt with top N packages in https://hex.pm/packages?
+* Sample awesome_packages.txt with all packages in https://github.com/h4cc/awesome-elixir?
 
 ## Author
 

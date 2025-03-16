@@ -6,6 +6,10 @@ List your desired Elixir libraries in a `libraries.txt` file, then run `elixir s
 
 You can view your documents using the [Caddy File Server](https://caddyserver.com) or something similar.
 
+## Disclaimers
+
+I have tested this library on my own Linux and Mac machines, but I own no Windows machines and am unable to test on Windows.
+
 ## Usage
 
 ### Pulling down this repository
@@ -20,6 +24,14 @@ OR
 
 ```
 git clone https://github.com/JamesLavin/local_hexdocs.git
+```
+
+### Updating this repository
+
+To pull future `LocalHexdocs` updates, cd into this repository and run:
+
+```
+git pull origin main
 ```
 
 ### Specifying Hexdocs libraries you want to save locally

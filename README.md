@@ -43,7 +43,7 @@ If you do nothing, running `elixir save_hexdocs.ex` in this directory will downl
 You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") packages, but this may make it hard to update this project in the future, so we recommend that you:
 
 1) Create a `packages` subdirectory by running `mkdir packages`
-2) Copy `default_packages.txt` to a new `packages.txt` file -- `cp default_packages.txt packages/packages.txt` -- and modify that.
+2) Copy `popular_packages.txt` or `default_packages.txt` to a new `packages.txt` file -- `cp popular_packages.txt packages/popular_packages.txt` or `cp default_packages.txt packages/packages.txt` -- and modify that.
 
 You don't need to create a separate `/packages` subdirectory, but we recommend doing so. We intend to enable you to place multiple files inside `/packages` and `LocalHexdocs` will pull documentation for all packages listed in all files within the `/packages` subdirectory.
 
@@ -90,6 +90,45 @@ cd ~/.hex/docs/hexpm
 caddy file-server --browse --listen :8888
 ```
 
+### Searching through your local Hexdocs files
+
+Downloading documentation makes it easily searchable, so if you download the most popular Elixir packages' documentation, you can search through it to discover potentially valuable packages.
+
+For example, if you're curious which Elixir packages use [JOSE](https://jose.readthedocs.io/en/latest/), you can run this query:
+
+```
+$ grep -rl "JOSE" ~/.hex/docs/hexpm
+...
+./joken/2.6.2/Joken.Signer.html
+./joken/2.6.2/Joken.html
+./joken/2.6.2/api-reference.html
+./joken/2.6.2/changelog.html
+./joken/2.6.2/dist/search_data-2420A17A.js
+./joken/2.6.2/introduction.html
+./joken/2.6.2/migration_from_1.html
+...
+./jose/1.11.10/jose_jwk_oct.html
+./jose/1.11.10/jose_jwk_openssh_key.html
+./jose/1.11.10/jose_jwk_pem.html
+./jose/1.11.10/jose_jwk_set.html
+./jose/1.11.10/jose_jwk_use_enc.html
+./jose/1.11.10/jose_jwk_use_sig.html
+./jose/1.11.10/jose_jws.html
+./jose/1.11.10/jose_jws_alg.html
+./jose/1.11.10/jose_jws_alg_ecdsa.html
+./jose/1.11.10/jose_jws_alg_eddsa.html
+./jose/1.11.10/jose_jws_alg_hmac.html
+...
+./livebook/0.15.4/custom_auth.html
+./livebook/0.15.4/dist/search_data-CE645AD5.js
+./oidcc/3.3.0/Oidcc.ClientContext.html
+./oidcc/3.3.0/Oidcc.ProviderConfiguration.Worker.html
+./oidcc/3.3.0/Oidcc.ProviderConfiguration.html
+./oidcc/3.3.0/Oidcc.Token.html
+./oidcc/3.3.0/Oidcc.html
+...
+```
+
 ### Updating your Hexdocs documentation
 
 Updating your local Hexdocs documentation is as simple as re-running the `elixir save_hexdocs.ex` command.
@@ -100,6 +139,7 @@ If you want to ensure you always have the latest documentation, you might create
 
 ## Possible future features
 
+* Option for loading only the top-N popular packages from popular_packages.txt
 * Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"
 * Concat, sort, de-dupe, and pull docs for all packages listed in all files within the `/packages` subdirectory
 * De-duplicate & sort packages before processing/displaying them?

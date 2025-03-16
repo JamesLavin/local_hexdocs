@@ -52,7 +52,7 @@ You can modify `default_packages.txt` to add, remove, or comment out (with a lea
 
 1) Create a `/packages` subdirectory by running `mkdir packages`
 
-2) Create at least one file within `/packages` containing at least one package name
+2) Create at least one file containing at least one package name -- one line per package name -- within `/packages`
 
 You can create a new file (with any name you desire) inside `/packages` and/or you can copy `popular_packages.txt` and/or `default_packages.txt` to the `/packages` subdirectory. For example:
 

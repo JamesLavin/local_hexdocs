@@ -4,7 +4,7 @@
 
 List your desired Elixir packages in a `packages.txt` file (in either this project's directory or in a `/packages` subdirectory), then run `elixir save_hexdocs.ex` to pull down the lastest Hexdocs for all packages to your local machine.
 
-You can view your documents using the [Caddy File Server](https://caddyserver.com) or something similar.
+You can view your documents using the [Caddy](https://caddyserver.com) file server or something similar.
 
 ## Disclaimers
 
@@ -43,7 +43,7 @@ If you do nothing, running `elixir save_hexdocs.ex` in this directory will downl
 You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") packages, but this may make it hard to update this project in the future, so we recommend that you:
 
 1) Create a `packages` subdirectory by running `mkdir packages`
-2) Copy `popular_packages.txt` or `default_packages.txt` to a new `packages.txt` file -- `cp popular_packages.txt packages/popular_packages.txt` or `cp default_packages.txt packages/packages.txt` -- and modify that. Or create your own file within `/packages` with a `.txt` extension. All packages names (one per line) in all files with a `.txt` extension in the `/packages` directory will be merged into a list of packages to pull documentation for. You can create multiple files, and it's fine if the same package appears more than once.
+2) Copy `popular_packages.txt` and/or `default_packages.txt` to a new `packages.txt` file -- `cp popular_packages.txt packages/popular_packages.txt` or `cp default_packages.txt packages/packages.txt` -- and modify that. Or create your own file within `/packages`. All packages names (one per line) in all files in the `/packages` directory will be merged into a list of packages to pull documentation for. You can create multiple files, and it's fine if the same package appears more than once. Again, each package name should be listed on its own line.
 
 You don't need to create a separate `/packages` subdirectory, but we recommend doing so.
 
@@ -131,7 +131,11 @@ $ grep -rl "JOSE" ~/.hex/docs/hexpm
 
 ### Updating your Hexdocs documentation
 
-Updating your local Hexdocs documentation is as simple as re-running the `elixir save_hexdocs.ex` command.
+Updating your local Hexdocs documentation is as simple as re-running:
+
+```
+elixir save_hexdocs.ex
+```
 
 Each time you run this, `LocalHexdocs` will pull the latest version of documentation for each specified library.
 
@@ -142,6 +146,8 @@ If you want to ensure you always have the latest documentation, you might create
 * Option for loading only the top-N popular packages from popular_packages.txt
 * Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"
 * De-duplicate & sort packages before processing/displaying them?
+* Command for removing documentation of outdated package versions
+* Option for automatically removing documentation of outdated package versions
 * Display "amqp_client/4.0.3" as "amqp_client (4.0.3)"?
 * Sample popular_packages.txt with top N packages in https://hex.pm/packages?
 * Sample awesome_packages.txt with all packages in https://github.com/h4cc/awesome-elixir?

@@ -45,13 +45,14 @@ defmodule LocalHexdocs do
 
     # Expected responses:
     # "Failed to retrieve package information\nAPI rate limit exceeded for IP [my IP address]\n** (MatchError) no match of right hand side value: nil\n    (hex 2.1.1) lib/mix/tasks/hex.docs.ex:135: Mix.Tasks.Hex.Docs.find_package_latest_version/2\n    (hex 2.1.1) lib/mix/tasks/hex.docs.ex:99: Mix.Tasks.Hex.Docs.fetch_docs/2\n    (mix 1.17.3) lib/mix/task.ex:495: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.17.3) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /home/mateusz/.asdf/installs/elixir/1.17.3-otp-27/bin/mix:2: (file)"
+    # {:ok, ~c"Couldn't find docs for package with name neotoma or version 1.7.3\n"}
     # {:ok, ~c"** (Mix) No package with name made_up_library\n"}
     # {:ok, ~c"Docs already fetched: /home/mateusz/.hex/docs/hexpm/mox/1.2.0\n"}
     # {:ok, ~c"Docs fetched: /home/mateusz/.hex/docs/hexpm/paginator/1.2.0\n"}
 
     stream
     |> Stream.take_while(fn resp -> elem(resp, 0) == :ok && !String.match?(elem(resp, 1) |> to_string(), ~r/rate limit exceeded for IP /) end)
-    |> Stream.each(fn {:ok, charlist} -> charlist |> to_string() |> String.trim() |> String.replace("** (Mix) ", "") |> IO.inspect() end)
+    |> Stream.each(&display_response/1)
     |> Enum.to_list()
     |> process_list()
     |> IO.inspect(limit: :infinity, printable_limit: :infinity)
@@ -74,7 +75,7 @@ defmodule LocalHexdocs do
   end
 
   defp process_list(list) when is_list(list) do
-    base_map = %{"Docs already fetched" => [], "Docs fetched" => [], "No package with name" => []}
+    base_map = %{"Couldn't find docs" => [], "Docs already fetched" => [], "Docs fetched" => [], "No package with name" => []}
 
     list
     |> Enum.map(&convert_response/1)
@@ -90,11 +91,30 @@ defmodule LocalHexdocs do
     ["No package with name", package_name]
   end
 
+  defp convert_response({:ok, ~c"Couldn't find docs for package with name " ++ rest}) do
+    package_name =
+      rest
+      |> to_string()
+      |> String.trim()
+      |> String.split(" ")
+      |> List.first()
+
+    ["Couldn't find docs", package_name]
+  end
+
   defp convert_response({:ok, charlist}) when is_list(charlist) do
     charlist
     |> to_string()
     |> String.trim()
     |> String.split(": ")
+  end
+
+  defp display_response({:ok, charlist}) when is_list(charlist) do
+    charlist
+    |> to_string()
+    |> String.trim()
+    |> String.replace("** (Mix) ", "")
+    |> IO.inspect()
   end
 
   # IMPROVE

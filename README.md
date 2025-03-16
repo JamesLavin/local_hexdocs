@@ -2,13 +2,13 @@
 
 `LocalHexdocs` is a simple Elixir script allowing you to easily save and update [Hexdocs](https://hexdocs.pm/) files locally on your machine so you always have the most recent documentation for any Elixir, Gleam, or Erlang packages you might want to view.
 
-List your desired Elixir packages in a `packages.txt` file, then run `elixir save_hexdocs.ex` to pull down the lastest Hexdocs for all packages to your local machine.
+List your desired Elixir packages in a `packages.txt` file (in either this project's directory or in a `/packages` subdirectory), then run `elixir save_hexdocs.ex` to pull down the lastest Hexdocs for all packages to your local machine.
 
 You can view your documents using the [Caddy File Server](https://caddyserver.com) or something similar.
 
 ## Disclaimers
 
-I have tested this library on my own Linux and Mac machines, but I own no Windows machines and am unable to test on Windows.
+I have tested this library on my own Linux and Mac machines but own no Windows machines and am unable to test on Windows.
 
 ## Usage
 
@@ -40,9 +40,14 @@ After pulling down this repository, the next step is `cd`-ing into the top direc
 
 If you do nothing, running `elixir save_hexdocs.ex` in this directory will download all Hexdoc files listed in the provided `default_packages.txt`.
 
-You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") packages, but this may make it hard to update this project in the future, so we recommend that you copy `default_packages.txt` to a new `packages.txt` file and modify that.
+You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") packages, but this may make it hard to update this project in the future, so we recommend that you:
 
-`packages.txt` is listed in `.gitignore`, so updating this repository will not touch that file. You can safely make it your own.
+1) Create a `packages` subdirectory by running `mkdir packages`
+2) Copy `default_packages.txt` to a new `packages.txt` file -- `cp default_packages.txt packages/packages.txt` -- and modify that.
+
+You don't need to create a separate `/packages` subdirectory, but we recommend doing so. We intend to enable you to place multiple files inside `/packages` and `LocalHexdocs` will pull documentation for all packages listed in all files within the `/packages` subdirectory.
+
+`packages/*` and `packages.txt` are listed in `.gitignore`, so updating this repository will not touch `./packages.txt` or anything in `packages/`. You can safely make customize them and make them your own.
 
 ### Running `LocalHexdocs`
 
@@ -96,6 +101,7 @@ If you want to ensure you always have the latest documentation, you might create
 ## Possible future features
 
 * Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"
+* Concat, sort, de-dupe, and pull docs for all packages listed in all files within the `/packages` subdirectory
 * De-duplicate & sort packages before processing/displaying them?
 * Display "amqp_client/4.0.3" as "amqp_client (4.0.3)"?
 * Sample popular_packages.txt with top N packages in https://hex.pm/packages?

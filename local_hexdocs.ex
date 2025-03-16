@@ -61,9 +61,10 @@ defmodule LocalHexdocs do
 
   # Use packages.txt if it exists or default_packages.txt otherwise
   defp packages_file do
-    ["packages/packages.txt", "packages.txt", "default_packages.txt"]
+    ["packages.txt", "default_packages.txt"]
     |> Enum.find(fn file -> Path.join(File.cwd!(), file) |> File.exists?() end)
     |> Path.expand()
+    |> List.wrap()
   end
 
   defp process_list(list) when is_list(list) do

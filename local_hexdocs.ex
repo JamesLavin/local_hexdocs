@@ -13,6 +13,8 @@ defmodule LocalHexdocs do
       that you wish to include, and this file will be used instead of `default_packages.txt`.
       `packages.txt` is included in `.gitignore`, so you should be able to safely modify your
       file and have it persist across Git updates.
+
+  See [README.md](https://github.com/JamesLavin/local_hexdocs/blob/main/README.md) for more details
   """
 
   # Number of parallel threads used to pull documentation. The higher this number,

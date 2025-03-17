@@ -33,12 +33,14 @@ defmodule LocalHexdocs do
 
   def desired_packages do
     packages_files()
-    |> Enum.flat_map(&extract_packages/1)
+    |> Enum.flat_map(&extract_package_names/1)
     |> Enum.sort()
     |> Enum.uniq()
+    # For testing:
+    # |> Enum.take(3)
   end
 
-  defp extract_packages(filepath) do
+  defp extract_package_names(filepath) do
     filepath
     |> File.read!()
     |> String.split("\n")
@@ -46,7 +48,6 @@ defmodule LocalHexdocs do
     |> Enum.reject(&is_nil(&1))
     |> Enum.reject(& &1 == "")
     |> Enum.reject(& String.starts_with?(&1, "#"))
-    # |> Enum.take(10)
   end
 
   def fetch_all do

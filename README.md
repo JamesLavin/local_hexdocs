@@ -5,7 +5,7 @@
 List your desired Elixir packages in one or more files (in a `/packages` subdirectory... or use the provided `default_packages.txt` file), then fetch the lastest Hexdocs for all packages to your local machine with:
 
 ```
-elixir save_hexdocs.exs
+elixir local_docs.exs get
 ```
 
 Once downloaded, you can:
@@ -57,7 +57,7 @@ git pull origin main
 
 After cloning this repository, `cd` into it and specify which Elixir packages you wish to pull documentation for.
 
-If you do nothing, running `elixir save_hexdocs.exs` in this directory will download all Hexdoc files for packages listed in the provided `default_packages.txt`. (There's nothing magical about `default_packages.txt`, which was simply my initial list of desired packages.)
+If you do nothing, running `elixir local_docs.exs get` in this directory will download all Hexdoc files for packages listed in the provided `default_packages.txt`. (There's nothing magical about `default_packages.txt`, which was simply my initial list of desired packages.)
 
 You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") packages, but this may make it hard to update this project in the future, so we recommend that you:
 
@@ -105,7 +105,7 @@ If you don't create a `/packages` directory, only `default_packages.txt` or `pac
 Once you're happy with your package configuration (whether you choose to create a `packages.txt` file or `/packages/*.txt` files or use the `default_packages.txt` file), you can run this script to pull down the latest documentation for each library with this command, executed from the main directory :
 
 ```
-elixir save_hexdocs.exs
+elixir local_docs.exs get
 ```
 
 (I didn't bother creating an executable binary since anyone wanting to download Hexdocs probably already has Elixir installed.)
@@ -186,7 +186,7 @@ $ grep -rl "JOSE" ~/.hex/docs/hexpm
 To view a list of all Hex packages with downloaded Hexdocs, run:
 
 ```
-elixir list_hexdocs.exs
+elixir local_docs.exs list
 ```
 
 ### Updating your Hexdocs documentation
@@ -194,18 +194,19 @@ elixir list_hexdocs.exs
 Updating your local Hexdocs documentation is as simple as re-running:
 
 ```
-elixir save_hexdocs.exs
+elixir local_docs.exs get
 ```
 
 Each time you run this, `LocalHexdocs` will pull the latest version of documentation for each specified library.
 
-If you want to ensure you always have the latest documentation, you might create a cron job to periodically run `elixir save_hexdocs.exs`.
+If you want to ensure you always have the latest documentation, you might create a cron job to periodically run `elixir local_docs.exs get`.
 
 ## Possible future features
 
 * Handle "** (MatchError) no match of right hand side value: {:error, :eacces}\n    (hex 2.0.6) lib/mix/tasks/hex.docs.ex:377: Mix.Tasks.Hex.Docs.extract_docs/2\n    (mix 1.16.1) lib/mix/task.ex:478: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.16.1) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /Users/jameslavin/.asdf/installs/elixir/1.16.1-otp-26/bin/mix:2: (file)"
-* Instead of having separate commands like `elixir list_hexdocs.exs` and `elixir save_hexdocs.exs`, create a unified command-line API
-* `elixir list_hexdocs.exs` could display (perhaps optionally) the individual and total size of downloaded documentation
+* Recommend grep command that doesn't generate so many "grep: /home/.../.hex/docs/hexpm/mist/4.0.7/fonts/ubuntu-mono-v15-regular-latin.woff2: Permission denied"
+* Improve the new unified command-line API
+* `elixir local_docs.exs list` could display (perhaps optionally) the individual and total size of downloaded documentation
 * Function for listing all desired packages without downloaded documentation
 * Option to load only the top-N popular packages from `popular_packages.txt`
 * Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"

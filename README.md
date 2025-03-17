@@ -15,7 +15,7 @@ Once downloaded, you can:
 
 ## Runs on Linux & Mac. Untested on Windows
 
-I have tested this library on my own Linux and Mac machines but own no Windows machines and am unable to test on Windows.
+I have tested `LocalHexdocs` on my own Linux and Mac machines but own no Windows machines and am unable to test on Windows.
 
 ## Performance & rate-limiting
 
@@ -59,13 +59,13 @@ After cloning this repository, `cd` into it and specify which Elixir packages yo
 
 If you do nothing, running `elixir local_docs.exs get` in this directory will download all Hexdoc files for packages listed in the provided `default_packages.txt`. (There's nothing magical about `default_packages.txt`, which was simply my initial list of desired packages.)
 
-You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") packages, but this may make it hard to update this project in the future, so we recommend that you:
+You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") package names, but this may make it hard to update this project in the future, so I recommend that you:
 
 1) Create a `/packages` subdirectory by running `mkdir packages`
 
 2) Create at least one file containing at least one package name -- one line per package name -- within `/packages`
 
-You can create a new file (with any name you desire) inside `/packages` and/or you can copy `popular_packages.txt` and/or `default_packages.txt` to the `/packages` subdirectory. For example:
+You can create a new file (with any name you desire) inside `/packages` and/or copy `popular_packages.txt` and/or `default_packages.txt` to the `/packages` subdirectory. For example:
 
 ```
 cp popular_packages.txt packages/popular_packages.txt
@@ -77,7 +77,7 @@ cp default_packages.txt packages/packages.txt
 
 It doesn't matter whether you create your own file(s) or copy files from elsewhere.
 
-You can name these files anything you want. All files in the `/packages` directory will be used.
+You can name these files anything you want. All files in the `/packages` directory will be combined (and package names de-duped).
 
 You can modify the files' content by adding/removing package names (one package per line) and/or adding comments (starting with #"). For example:
 
@@ -102,7 +102,7 @@ If you don't create a `/packages` directory, only `default_packages.txt` or `pac
 
 ### Running `LocalHexdocs`
 
-Once you're happy with your package configuration (whether you choose to create a `packages.txt` file or `/packages/*.txt` files or use the `default_packages.txt` file), you can run this script to pull down the latest documentation for each library with this command, executed from the main directory :
+Once you're happy with your package configuration (whether you choose to create a `packages.txt` file or files in `/packages/` or use the `default_packages.txt` file), you can pull down the latest documentation for each package with this command, executed from the main directory:
 
 ```
 elixir local_docs.exs get
@@ -110,13 +110,15 @@ elixir local_docs.exs get
 
 (I didn't bother creating an executable binary since anyone wanting to download Hexdocs probably already has Elixir installed.)
 
-You will see a stream of output, with one line per library. Each should say one of the following:
+You will see a stream of output, with one line per package. Each should say one of the following:
 
 * "Docs fetched: /home/mateusz/.hex/docs/hexpm/scholar/0.4.0"
 * "No package with name made_up_library"
 * "Docs already fetched: /home/mateusz/.hex/docs/hexpm/sobelow/0.13.0"
 
-At the end, you should see an Elixir map with four keys, each with a list of library names, like:
+After all packages have processed, you should see an Elixir map summarizing what happened.
+
+It contains four keys, each with a list of package names, like:
 
 ```
 %{
@@ -135,7 +137,7 @@ At the end, you should see an Elixir map with four keys, each with a list of lib
 
 ### Serving & viewing your local Hexdocs files
 
-Once you have downloaded your Hexdoc files locally, one way to view them is using `caddy file-server` (see: [CaddyServer.com](https://caddyserver.com/) and [the Caddy Github repo](https://github.com/caddyserver/caddy)). The following will serve your Hexdocs on port 8888 (assuming your `hexpm` directory is at `~/.hex/docs/hexpm`):
+After downloading your Hexdoc files, one way to view them is using `caddy file-server` (see: [CaddyServer.com](https://caddyserver.com/) and [the Caddy Github repo](https://github.com/caddyserver/caddy)). The following will serve your Hexdocs on port 8888 (assuming your `hexpm` directory is at `~/.hex/docs/hexpm`):
 
 ```
 cd ~/.hex/docs/hexpm
@@ -144,12 +146,16 @@ caddy file-server --browse --listen :8888
 
 ### Searching through your local Hexdocs files
 
-Downloading documentation makes it easily searchable, so if you download the most popular Elixir packages' documentation, you can search through it to discover potentially valuable packages.
+Downloading documentation makes it easily searchable, so if you download the most popular Elixir/Erlang/Gleam packages' documentation, you can search through them all to discover potentially useful packages.
 
 For example, if you're curious which Elixir packages use [JOSE](https://jose.readthedocs.io/en/latest/), you can run this query:
 
 ```
 $ grep -rl "JOSE" ~/.hex/docs/hexpm
+```
+
+Which should list all files containing "JOSE":
+```
 ...
 ./joken/2.6.2/Joken.Signer.html
 ./joken/2.6.2/Joken.html
@@ -197,11 +203,11 @@ Updating your local Hexdocs documentation is as simple as re-running:
 elixir local_docs.exs get
 ```
 
-Each time you run this, `LocalHexdocs` will pull the latest version of documentation for each specified library.
+Each time you run this, `LocalHexdocs` will pull the latest version of documentation for each specified package.
 
 If you want to ensure you always have the latest documentation, you might create a cron job to periodically run `elixir local_docs.exs get`.
 
-## Possible future features
+## Known issues & possible future features
 
 * Handle "** (MatchError) no match of right hand side value: {:error, :eacces}\n    (hex 2.0.6) lib/mix/tasks/hex.docs.ex:377: Mix.Tasks.Hex.Docs.extract_docs/2\n    (mix 1.16.1) lib/mix/task.ex:478: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.16.1) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /Users/jameslavin/.asdf/installs/elixir/1.16.1-otp-26/bin/mix:2: (file)"
 * Recommend grep command that doesn't generate so many "grep: /home/.../.hex/docs/hexpm/mist/4.0.7/fonts/ubuntu-mono-v15-regular-latin.woff2: Permission denied"

@@ -74,10 +74,7 @@ defmodule LocalHexdocs do
     # {:ok, ~c"Docs fetched: /home/mateusz/.hex/docs/hexpm/paginator/1.2.0\n"}
 
     stream
-    |> Stream.take_while(fn resp ->
-      elem(resp, 0) == :ok &&
-        !String.match?(elem(resp, 1) |> to_string(), ~r/rate limit exceeded for IP /)
-    end)
+    |> Stream.take_while(fn resp -> !rate_limited?(resp) end)
     |> Stream.each(&display_response/1)
     |> Enum.to_list()
     |> process_list()
@@ -169,6 +166,11 @@ defmodule LocalHexdocs do
     |> String.trim()
     |> String.replace("** (Mix) ", "")
     |> IO.inspect()
+  end
+
+  defp rate_limited?(resp) do
+    elem(resp, 0) == :ok &&
+      String.match?(elem(resp, 1) |> to_string(), ~r/rate limit exceeded for IP /)
   end
 
   # IMPROVE

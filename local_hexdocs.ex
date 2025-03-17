@@ -37,7 +37,7 @@ defmodule LocalHexdocs do
     |> Enum.sort()
     |> Enum.uniq()
     # For testing:
-    # |> Enum.take(3)
+    # |> Enum.take(10)
   end
 
   defp extract_package_names(filepath) do
@@ -93,10 +93,21 @@ defmodule LocalHexdocs do
     |> Enum.map(&convert_response/1)
     |> Enum.group_by(&List.first/1)
     |> (fn grouped -> Map.merge(base_map, grouped) end).()
-    |> Map.update!("Couldn't find docs", fn list -> Enum.map(list, &List.last/1) end)
-    |> Map.update!("Docs already fetched", fn list -> Enum.map(list, &List.last/1) |> Enum.map(&String.split(&1, "/hexpm/")) |> Enum.map(&List.last/1) end)
-    |> Map.update!("Docs fetched", fn list -> Enum.map(list, &List.last/1) |> Enum.map(&String.split(&1, "/hexpm/")) |> Enum.map(&List.last/1) end)
-    |> Map.update!("No package with name", fn list -> Enum.map(list, &List.last/1) end)
+    |> Map.update!("Couldn't find docs", &Enum.map(&1, fn [_status, package_name] -> package_name end))
+    |> Map.update!("Docs already fetched", &extract_package_names_from_paths/1)
+    |> Map.update!("Docs fetched", &extract_package_names_from_paths/1)
+    |> Map.update!("No package with name", &Enum.map(&1, fn [_status, package_name] -> package_name end))
+  end
+
+  defp extract_package_names_from_paths(list) when is_list(list) do
+    list
+    |> Enum.map(&extract_package_name_from_path/1)
+  end
+
+  defp extract_package_name_from_path([_status, path]) when is_binary(path) do
+    path
+    |> String.split("/hexpm/")
+    |> List.last()
   end
 
   defp convert_response({:ok, ~c"** (Mix) No package with name " ++ package_name}) do

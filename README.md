@@ -225,5 +225,5 @@ If you want to ensure you always have the latest documentation, you might create
 
 ## Author
 
-`LocalHexdocs` was created by James Lavin.
+`LocalHexdocs` was created by James Lavin, an [Elixir](https://elixir-lang.org/) programmer who also loves [R (statistics)](https://www.r-project.org/), [Linux](https://www.linux.org/), [PostgreSQL](https://www.postgresql.org/), and running his [Kubernetes](https://kubernetes.io/)+[Cilium](https://cilium.io/)+[Helm](https://helm.sh/)+[Podman](https://podman.io/)+[CloudNativePG](https://cloudnative-pg.io/)+[Cert-manager](https://cert-manager.io/) cluster.
 

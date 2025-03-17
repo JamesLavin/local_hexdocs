@@ -1,8 +1,12 @@
 defmodule LocalHexdocs do
   @moduledoc """
-  You have three options for choosing packages whose documentation you wish to save locally:
-    * You can use the existing `default_packages.txt` as is. This will save ALL those packages'
-      documentation to your local computer
+  You have four options for choosing packages whose documentation you wish to save locally:
+    * (RECOMMENDED) You can create a `/packages` subdirectory with one or more files with at
+      least one row containing a package name you wish to save Hexdocs for. All package names
+      (one row per package name) in all files you create in this directory will be merged and
+      de-duplicated, and `LocalHexdocs` will try to pull their documentation.
+    * You can do nothing and use the existing `default_packages.txt` as is. This will save ALL
+      those packages' documentation to your local computer
     * You can modify `default_packages.txt` and make it your own. You can add additional packages
       and/or remove packages by either deleting them or commenting them out with a leading "#"
     * You can create your own `packages.txt` file in the main directory with any packages in it

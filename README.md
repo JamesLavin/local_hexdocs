@@ -205,7 +205,7 @@ elixir local_docs.exs get
 
 Each time you run this, `LocalHexdocs` will pull the latest version of documentation for each specified package.
 
-If you want to ensure you always have the latest documentation, you might create a cron job to periodically run `elixir local_docs.exs get`.
+To ensure you always have the latest documentation, you might create a cron job to periodically run `elixir local_docs.exs get` (...but please don't run it too frequently or you'll needlessly hammer the Hexdocs.pm server).
 
 ## Known issues & possible future features
 

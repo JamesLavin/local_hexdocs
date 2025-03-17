@@ -8,11 +8,12 @@ Code.ensure_loaded(LocalHexdocs)
 cond do
   "get" in args_list ->
     LocalHexdocs.fetch_all()
+
   "list" in args_list ->
     LocalHexdocs.downloaded_packages()
+
   true ->
     IO.puts("I am unable to determine what you want to do.\n")
     IO.puts("To download Hexdocs documentation, run 'elixir local_docs.exs get'\n")
     IO.puts("To list all packages with downloaded Hexdocs, run 'elixir local_docs.exs list'")
 end
-

@@ -1,5 +1,4 @@
 defmodule LocalHexdocs do
-
   @moduledoc """
   You have three options for choosing packages whose documentation you wish to save locally:
     * You can use the existing `default_packages.txt` as is. This will save ALL those packages'
@@ -28,7 +27,11 @@ defmodule LocalHexdocs do
     hexpm_dir()
     |> File.ls!()
     |> Enum.sort()
-    |> IO.inspect(label: "Packages downloaded in #{hexpm_dir()}", limit: :infinity, printable_limit: :infinity)
+    |> IO.inspect(
+      label: "Packages downloaded in #{hexpm_dir()}",
+      limit: :infinity,
+      printable_limit: :infinity
+    )
   end
 
   def desired_packages do
@@ -36,6 +39,7 @@ defmodule LocalHexdocs do
     |> Enum.flat_map(&extract_package_names/1)
     |> Enum.sort()
     |> Enum.uniq()
+
     # For testing:
     # |> Enum.take(10)
   end
@@ -46,14 +50,17 @@ defmodule LocalHexdocs do
     |> String.split("\n")
     |> Enum.map(&String.trim/1)
     |> Enum.reject(&is_nil(&1))
-    |> Enum.reject(& &1 == "")
-    |> Enum.reject(& String.starts_with?(&1, "#"))
+    |> Enum.reject(&(&1 == ""))
+    |> Enum.reject(&String.starts_with?(&1, "#"))
   end
 
   def fetch_all do
     stream =
       desired_packages()
-      |> Task.async_stream(fn lib -> :os.cmd(~c(#{@mix_path} hex.docs fetch #{lib})) end, timeout: @timeout_ms, max_concurrency: @max_concurrency)
+      |> Task.async_stream(fn lib -> :os.cmd(~c(#{@mix_path} hex.docs fetch #{lib})) end,
+        timeout: @timeout_ms,
+        max_concurrency: @max_concurrency
+      )
 
     # Expected responses:
     # "Failed to retrieve package information\nAPI rate limit exceeded for IP [my IP address]\n** (MatchError) no match of right hand side value: nil\n    (hex 2.1.1) lib/mix/tasks/hex.docs.ex:135: Mix.Tasks.Hex.Docs.find_package_latest_version/2\n    (hex 2.1.1) lib/mix/tasks/hex.docs.ex:99: Mix.Tasks.Hex.Docs.fetch_docs/2\n    (mix 1.17.3) lib/mix/task.ex:495: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.17.3) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /home/mateusz/.asdf/installs/elixir/1.17.3-otp-27/bin/mix:2: (file)"
@@ -63,7 +70,10 @@ defmodule LocalHexdocs do
     # {:ok, ~c"Docs fetched: /home/mateusz/.hex/docs/hexpm/paginator/1.2.0\n"}
 
     stream
-    |> Stream.take_while(fn resp -> elem(resp, 0) == :ok && !String.match?(elem(resp, 1) |> to_string(), ~r/rate limit exceeded for IP /) end)
+    |> Stream.take_while(fn resp ->
+      elem(resp, 0) == :ok &&
+        !String.match?(elem(resp, 1) |> to_string(), ~r/rate limit exceeded for IP /)
+    end)
     |> Stream.each(&display_response/1)
     |> Enum.to_list()
     |> process_list()
@@ -72,9 +82,14 @@ defmodule LocalHexdocs do
 
   defp packages_files do
     case Path.expand(".") |> Path.join("/packages") |> File.ls() do
-     {:ok, []} -> packages_file()
-     {:ok, user_files} -> user_files |> Enum.map(fn filename -> Path.join(Path.expand("./packages"), filename) end)
-     {:error, _err} -> packages_file()
+      {:ok, []} ->
+        packages_file()
+
+      {:ok, user_files} ->
+        user_files |> Enum.map(fn filename -> Path.join(Path.expand("./packages"), filename) end)
+
+      {:error, _err} ->
+        packages_file()
     end
   end
 
@@ -87,16 +102,27 @@ defmodule LocalHexdocs do
   end
 
   defp process_list(list) when is_list(list) do
-    base_map = %{"Couldn't find docs" => [], "Docs already fetched" => [], "Docs fetched" => [], "No package with name" => []}
+    base_map = %{
+      "Couldn't find docs" => [],
+      "Docs already fetched" => [],
+      "Docs fetched" => [],
+      "No package with name" => []
+    }
 
     list
     |> Enum.map(&convert_response/1)
     |> Enum.group_by(&List.first/1)
     |> (fn grouped -> Map.merge(base_map, grouped) end).()
-    |> Map.update!("Couldn't find docs", &Enum.map(&1, fn [_status, package_name] -> package_name end))
+    |> Map.update!(
+      "Couldn't find docs",
+      &Enum.map(&1, fn [_status, package_name] -> package_name end)
+    )
     |> Map.update!("Docs already fetched", &extract_package_names_from_paths/1)
     |> Map.update!("Docs fetched", &extract_package_names_from_paths/1)
-    |> Map.update!("No package with name", &Enum.map(&1, fn [_status, package_name] -> package_name end))
+    |> Map.update!(
+      "No package with name",
+      &Enum.map(&1, fn [_status, package_name] -> package_name end)
+    )
   end
 
   defp extract_package_names_from_paths(list) when is_list(list) do

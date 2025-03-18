@@ -40,6 +40,26 @@ defmodule LocalHexdocs do
     )
   end
 
+  def downloaded_packages_with_versions do
+    hexpm_dir()
+    |> File.ls!()
+    |> Enum.sort()
+    |> Enum.map(&package_name_plus_versions/1)
+    |> IO.inspect(
+      label: "Packages downloaded in #{hexpm_dir()}",
+      limit: :infinity,
+      printable_limit: :infinity
+    )
+  end
+
+  def package_name_plus_versions(name) do
+    versions = hexpm_dir()
+      |> Path.join(name)
+      |> File.ls!()
+
+    {name |> String.to_atom(), versions}
+  end
+
   def desired_packages do
     packages_files()
     |> Enum.flat_map(&extract_package_names/1)

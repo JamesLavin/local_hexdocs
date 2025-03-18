@@ -195,6 +195,44 @@ To view a list of all Hex packages with downloaded Hexdocs, run:
 elixir local_docs.exs list
 ```
 
+Returns something like:
+
+```
+Packages downloaded in /home/user_name/.hex/docs/hexpm: ["abacus", "absinthe", "absinthe_constraints", "absinthe_error_payload",
+ "absinthe_federation", "absinthe_graphql_ws", "absinthe_phoenix",
+ "absinthe_plug", "absinthe_relay", "absinthe_relay_keyset_connection",
+ "accept", "accessible", "airports", "alembix", "amqp", "amqp_client",
+ ...
+ "zigler", "zipper", "zstream", "zxcvbn"]
+]
+```
+```
+```
+
+### Listing all Hex package versions with downloaded documentation
+
+```
+elixir local_docs.exs versions
+```
+
+Returns something like:
+
+```
+Packages downloaded in /home/user_name/.hex/docs/hexpm: [
+  ...
+  wallaby: ["0.30.10"],
+  web_driver_client: ["0.2.0"],
+  websock: ["0.5.3"],
+  websock_adapter: ["0.5.8"],
+  websockex: ["0.4.3"],
+  wisp: ["1.5.3"],
+  word_smith: ["0.2.0"],
+  worker_pool: ["6.4.0"],
+  workos: ["1.1.0"],
+  ...
+]
+```
+
 ### Updating your Hexdocs documentation
 
 Updating your local Hexdocs documentation is as simple as re-running:
@@ -215,13 +253,12 @@ To ensure you always have the latest documentation, you might create a cron job 
 * `elixir local_docs.exs list` could display (perhaps optionally) the individual and total size of downloaded documentation
 * Function for listing all desired packages without downloaded documentation
 * Option to load only the top-N popular packages from `popular_packages.txt`
-* Handle responses like "Couldn't find docs for package with name cqerl or version 2.1.3"
-* Command for removing documentation of outdated package versions
-* Option for automatically removing documentation of outdated package versions
+* Automatically remove documentation of outdated package versions, with option to keep older versions
+* Command for manually removing documentation of outdated package versions
 * Display "amqp_client/4.0.3" as "amqp_client (4.0.3)"?
 * Regularly update `popular_packages.txt` from current https://hex.pm/packages
 * Create `awesome_packages.txt` package list containing all packages in https://github.com/h4cc/awesome-elixir?
-* Can more be done to further avoid pounding `hexdocs.pm` and avoid triggering rate limiting?
+* Should more be done to further avoid pounding `hexdocs.pm` and avoid triggering rate limiting (e.g., pausing between pulls) or is it okay now that I've suppressed parallelization by default?
 
 ## Author
 

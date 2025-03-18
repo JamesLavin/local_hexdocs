@@ -12,6 +12,9 @@ cond do
   "list" in args_list ->
     LocalHexdocs.downloaded_packages()
 
+  "versions" in args_list ->
+    LocalHexdocs.downloaded_packages_with_versions()
+
   true ->
     IO.puts("I am unable to determine what you want to do.\n")
     IO.puts("To download Hexdocs documentation, run 'elixir local_docs.exs get'\n")

@@ -13,13 +13,13 @@ cond do
     LocalHexdocs.downloaded_packages()
 
   "versions" in args_list ->
-    LocalHexdocs.downloaded_packages_with_versions()
+    LocalHexdocs.display_downloaded_packages_with_versions()
 
   "multiple_versions" in args_list ->
-    LocalHexdocs.downloaded_packages_with_multiple_versions()
+    LocalHexdocs.display_downloaded_packages_with_multiple_versions()
 
   "to_clean" in args_list ->
-    LocalHexdocs.package_versions_to_remove()
+    LocalHexdocs.display_package_versions_to_remove()
 
   true ->
     IO.puts("I am unable to determine what you want to do.\n")

@@ -40,7 +40,7 @@ defmodule LocalHexdocs do
     )
   end
 
-  def downloaded_packages_with_versions do
+  def display_downloaded_packages_with_versions do
     do_downloaded_packages_with_versions()
     |> IO.inspect(
       label: "Packages downloaded in #{hexpm_dir()}",
@@ -53,17 +53,26 @@ defmodule LocalHexdocs do
     {name |> String.to_atom(), package_versions(name)}
   end
 
+  def display_package_versions_to_remove do
+    package_versions_to_remove()
+      |> IO.inspect(
+        label: "Packages with multiple Hexdocs versions in #{hexpm_dir()}",
+        limit: :infinity,
+        printable_limit: :infinity
+      )
+  end
+
+  # def remove_stale_versions do
+  #   package_versions_to_remove()
+  #     |> Enum.map()
+  # end
+
   def package_versions_to_remove do
     do_downloaded_packages_with_multiple_versions()
       # grab package names as atoms
       |> Enum.map(&elem(&1, 0))
       |> Enum.map(&Atom.to_string/1)
       |> Enum.map(&versions_to_keep_and_delete/1)
-      |> IO.inspect(
-        label: "Packages with multiple Hexdocs versions in #{hexpm_dir()}",
-        limit: :infinity,
-        printable_limit: :infinity
-      )
   end
 
   def versions_to_keep_and_delete(package_name) do
@@ -77,7 +86,7 @@ defmodule LocalHexdocs do
     %{package: package_name, keep: latest, delete: versions -- [latest]}
   end
 
-  def downloaded_packages_with_multiple_versions do
+  def display_downloaded_packages_with_multiple_versions do
     do_downloaded_packages_with_multiple_versions()
     |> IO.inspect(
       label: "Packages downloaded in #{hexpm_dir()} with multiple versions",

@@ -15,19 +15,19 @@ Once downloaded, you can:
 
 You can also:
 
-* List all packages with installed Hexdocs docs:
+* List all packages with local Hexdocs:
 ```
 elixir local_docs.exs list
 ```
-* List all versions of all packages with installed Hexdocs docs:
+* List all versions of all packages with local Hexdocs:
 ```
 elixir local_docs.exs versions
 ```
-* List all packages with multiple Hexdocs docs versions installed:
+* List all packages with multiple local Hexdocs versions:
 ```
 elixir local_docs.exs multiple_versions
 ```
-* See which package version directories `clean` would delete with:
+* See which package version directories `clean` would delete:
 ```
 elixir local_docs.exs to_clean
 ```

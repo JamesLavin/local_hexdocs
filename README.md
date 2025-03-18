@@ -196,7 +196,6 @@ elixir local_docs.exs list
 ```
 
 Returns something like:
-
 ```
 Packages downloaded in /home/user_name/.hex/docs/hexpm: ["abacus", "absinthe", "absinthe_constraints", "absinthe_error_payload",
  "absinthe_federation", "absinthe_graphql_ws", "absinthe_phoenix",
@@ -205,8 +204,6 @@ Packages downloaded in /home/user_name/.hex/docs/hexpm: ["abacus", "absinthe", "
  ...
  "zigler", "zipper", "zstream", "zxcvbn"]
 ]
-```
-```
 ```
 
 ### Listing all Hex package versions with downloaded documentation

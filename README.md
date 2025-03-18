@@ -112,9 +112,9 @@ elixir local_docs.exs get
 
 You will see a stream of output, with one line per package. Each should say one of the following:
 
-* "Docs fetched: /home/mateusz/.hex/docs/hexpm/scholar/0.4.0"
+* "Docs fetched: /home/user_name/.hex/docs/hexpm/scholar/0.4.0"
 * "No package with name made_up_library"
-* "Docs already fetched: /home/mateusz/.hex/docs/hexpm/sobelow/0.13.0"
+* "Docs already fetched: /home/user_name/.hex/docs/hexpm/sobelow/0.13.0"
 
 After all packages have processed, you should see an Elixir map summarizing what happened.
 
@@ -248,9 +248,31 @@ elixir local_docs.exs to_clean
 Returns something like:
 ```
 Packages with multiple Hexdocs versions in /home/user_name/.hex/docs/hexpm: [
-  %{delete: ["1.7.8"], keep: "1.7.9", package: "absinthe"},
-  %{delete: ["2.15.1"], keep: "2.15.2", package: "appsignal"}
+  %{
+    delete: ["1.7.8"],
+    keep: "1.7.9",
+    package: "absinthe",
+    delete_dirs: ["/home/user_name/.hex/docs/hexpm/absinthe/1.7.8"]
+  },
+  %{
+    delete: ["2.15.1"],
+    keep: "2.15.2",
+    package: "appsignal",
+    delete_dirs: ["/home/user_name/.hex/docs/hexpm/appsignal/2.15.1"]
+  }
 ]
+```
+
+To delete the directories listed in `delete_dirs`, run:
+
+```
+elixir local_docs.exs clean
+```
+
+This should return
+```
+"Deleting /home/user_name/.hex/docs/hexpm/absinthe/1.7.8"
+"Deleting /home/user_name/.hex/docs/hexpm/appsignal/2.15.1"
 ```
 
 ### Updating your Hexdocs documentation

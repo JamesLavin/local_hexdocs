@@ -41,10 +41,7 @@ defmodule LocalHexdocs do
   end
 
   def downloaded_packages_with_versions do
-    hexpm_dir()
-    |> File.ls!()
-    |> Enum.sort()
-    |> Enum.map(&package_name_plus_versions/1)
+    do_downloaded_packages_with_versions()
     |> IO.inspect(
       label: "Packages downloaded in #{hexpm_dir()}",
       limit: :infinity,
@@ -53,11 +50,29 @@ defmodule LocalHexdocs do
   end
 
   def package_name_plus_versions(name) do
-    versions = hexpm_dir()
+    versions =
+      hexpm_dir()
       |> Path.join(name)
       |> File.ls!()
 
     {name |> String.to_atom(), versions}
+  end
+
+  def downloaded_packages_with_multiple_versions do
+    do_downloaded_packages_with_versions()
+    |> Enum.filter(fn {_name, versions} -> length(versions) > 1 end)
+    |> IO.inspect(
+      label: "Packages downloaded in #{hexpm_dir()} with multiple versions",
+      limit: :infinity,
+      printable_limit: :infinity
+    )
+  end
+
+  defp do_downloaded_packages_with_versions do
+    hexpm_dir()
+    |> File.ls!()
+    |> Enum.sort()
+    |> Enum.map(&package_name_plus_versions/1)
   end
 
   def desired_packages do

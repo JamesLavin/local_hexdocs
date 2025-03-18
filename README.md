@@ -233,6 +233,16 @@ Packages downloaded in /home/user_name/.hex/docs/hexpm: [
 ]
 ```
 
+### Listing all Hex package versions with multiple versions of downloaded documentation
+
+```
+elixir local_docs.exs multiple_versions
+```
+Returns something like:
+```
+Packages downloaded in /home/user_name/.hex/docs/hexpm with multiple versions: [absinthe: ["1.7.8", "1.7.9"], appsignal: ["2.15.1", "2.15.2"]]
+```
+
 ### Updating your Hexdocs documentation
 
 Updating your local Hexdocs documentation is as simple as re-running:

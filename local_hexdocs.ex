@@ -50,17 +50,35 @@ defmodule LocalHexdocs do
   end
 
   def package_name_plus_versions(name) do
-    versions =
-      hexpm_dir()
-      |> Path.join(name)
-      |> File.ls!()
+    {name |> String.to_atom(), package_versions(name)}
+  end
 
-    {name |> String.to_atom(), versions}
+  def package_versions_to_remove do
+    do_downloaded_packages_with_multiple_versions()
+      # grab package names as atoms
+      |> Enum.map(&elem(&1, 0))
+      |> Enum.map(&Atom.to_string/1)
+      |> Enum.map(&versions_to_keep_and_delete/1)
+      |> IO.inspect(
+        label: "Packages with multiple Hexdocs versions in #{hexpm_dir()}",
+        limit: :infinity,
+        printable_limit: :infinity
+      )
+  end
+
+  def versions_to_keep_and_delete(package_name) do
+    versions = package_name
+      |> package_versions()
+
+    latest =
+      versions
+      |> latest_version()
+
+    %{package: package_name, keep: latest, delete: versions -- [latest]}
   end
 
   def downloaded_packages_with_multiple_versions do
-    do_downloaded_packages_with_versions()
-    |> Enum.filter(fn {_name, versions} -> length(versions) > 1 end)
+    do_downloaded_packages_with_multiple_versions()
     |> IO.inspect(
       label: "Packages downloaded in #{hexpm_dir()} with multiple versions",
       limit: :infinity,
@@ -73,6 +91,36 @@ defmodule LocalHexdocs do
     |> File.ls!()
     |> Enum.sort()
     |> Enum.map(&package_name_plus_versions/1)
+  end
+
+  defp do_downloaded_packages_with_multiple_versions do
+    do_downloaded_packages_with_versions()
+    |> Enum.filter(fn {_name, versions} -> length(versions) > 1 end)
+  end
+
+  defp latest_version(list_of_version_strings) do
+    list_of_version_strings
+      |> Enum.map(&version_string_to_int_list/1)
+      |> Enum.reduce(fn version, acc -> if version > acc do version else acc end end)
+      |> int_list_to_version_string()
+  end
+
+  # IMPROVE: This assumes version numbers are always integers. This will break if SemVer
+  #          is violated, as sometimes happens with pre-release version names.
+  defp version_string_to_int_list(version_string) when is_binary(version_string) do
+    version_string |> String.split(".") |> Enum.map(&String.to_integer/1) 
+  end
+
+  defp int_list_to_version_string(int_list) when is_list(int_list) do
+    int_list
+      |> Enum.map(&Integer.to_string/1)
+      |> Enum.join(".")
+  end
+
+  defp package_versions(package_name) do
+    hexpm_dir()
+    |> Path.join(package_name)
+    |> File.ls!()
   end
 
   def desired_packages do

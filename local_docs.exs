@@ -18,6 +18,9 @@ cond do
   "multiple_versions" in args_list ->
     LocalHexdocs.downloaded_packages_with_multiple_versions()
 
+  "to_clean" in args_list ->
+    LocalHexdocs.package_versions_to_remove()
+
   true ->
     IO.puts("I am unable to determine what you want to do.\n")
     IO.puts("To download Hexdocs documentation, run 'elixir local_docs.exs get'\n")

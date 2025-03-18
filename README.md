@@ -243,6 +243,19 @@ Returns something like:
 Packages downloaded in /home/user_name/.hex/docs/hexpm with multiple versions: [absinthe: ["1.7.8", "1.7.9"], appsignal: ["2.15.1", "2.15.2"]]
 ```
 
+### Removing older Hexdoc versions from packages with multiple versions
+
+```
+elixir local_docs.exs to_clean
+```
+Returns something like:
+```
+Packages with multiple Hexdocs versions in /home/user_name/.hex/docs/hexpm: [
+  %{delete: ["1.7.8"], keep: "1.7.9", package: "absinthe"},
+  %{delete: ["2.15.1"], keep: "2.15.2", package: "appsignal"}
+]
+```
+
 ### Updating your Hexdocs documentation
 
 Updating your local Hexdocs documentation is as simple as re-running:

@@ -55,11 +55,11 @@ defmodule LocalHexdocs do
 
   def display_package_versions_to_remove do
     package_versions_to_remove()
-      |> IO.inspect(
-        label: "Packages with multiple Hexdocs versions in #{hexpm_dir()}",
-        limit: :infinity,
-        printable_limit: :infinity
-      )
+    |> IO.inspect(
+      label: "Packages with multiple Hexdocs versions in #{hexpm_dir()}",
+      limit: :infinity,
+      printable_limit: :infinity
+    )
   end
 
   @doc """
@@ -69,32 +69,40 @@ defmodule LocalHexdocs do
   """
   def remove_stale_versions do
     package_versions_to_remove()
-      |> Enum.each(&delete_older_versions/1)
+    |> Enum.each(&delete_older_versions/1)
   end
 
-  defp delete_older_versions(%{package: _package_name, delete: _versions_to_delete, keep: _keep, delete_dirs: delete_dirs}) when is_list(delete_dirs) do
+  defp delete_older_versions(%{
+         package: _package_name,
+         delete: _versions_to_delete,
+         keep: _keep,
+         delete_dirs: delete_dirs
+       })
+       when is_list(delete_dirs) do
     delete_dirs
-      |> Enum.each(fn dir ->
-          IO.inspect("Deleting #{dir}")
-          File.rm_rf!(dir)
-         end)
+    |> Enum.each(fn dir ->
+      IO.inspect("Deleting #{dir}")
+      File.rm_rf!(dir)
+    end)
   end
 
-  defp path_to_version(package_name, version_string) when is_binary(package_name) and is_binary(version_string) do
+  defp path_to_version(package_name, version_string)
+       when is_binary(package_name) and is_binary(version_string) do
     hexpm_dir()
     |> Path.join([package_name, "/", version_string])
   end
 
   def package_versions_to_remove do
     downloaded_packages_with_multiple_versions()
-      # grab package names as atoms
-      |> Enum.map(&elem(&1, 0))
-      |> Enum.map(&Atom.to_string/1)
-      |> Enum.map(&versions_to_keep_and_delete/1)
+    # grab package names as atoms
+    |> Enum.map(&elem(&1, 0))
+    |> Enum.map(&Atom.to_string/1)
+    |> Enum.map(&versions_to_keep_and_delete/1)
   end
 
   def versions_to_keep_and_delete(package_name) do
-    versions = package_name
+    versions =
+      package_name
       |> package_versions()
 
     latest =
@@ -131,21 +139,27 @@ defmodule LocalHexdocs do
 
   defp latest_version(list_of_version_strings) do
     list_of_version_strings
-      |> Enum.map(&version_string_to_int_list/1)
-      |> Enum.reduce(fn version, acc -> if version > acc do version else acc end end)
-      |> int_list_to_version_string()
+    |> Enum.map(&version_string_to_int_list/1)
+    |> Enum.reduce(fn version, acc ->
+      if version > acc do
+        version
+      else
+        acc
+      end
+    end)
+    |> int_list_to_version_string()
   end
 
   # IMPROVE: This assumes version numbers are always integers. This will break if SemVer
   #          is violated, as sometimes happens with pre-release version names.
   defp version_string_to_int_list(version_string) when is_binary(version_string) do
-    version_string |> String.split(".") |> Enum.map(&String.to_integer/1) 
+    version_string |> String.split(".") |> Enum.map(&String.to_integer/1)
   end
 
   defp int_list_to_version_string(int_list) when is_list(int_list) do
     int_list
-      |> Enum.map(&Integer.to_string/1)
-      |> Enum.join(".")
+    |> Enum.map(&Integer.to_string/1)
+    |> Enum.join(".")
   end
 
   defp package_versions(package_name) do

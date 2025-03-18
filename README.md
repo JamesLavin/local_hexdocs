@@ -300,13 +300,16 @@ To ensure you always have the latest documentation, you might create a cron job 
 
 ## Known issues & possible future features
 
+* After getting all files, look for packages with multiple versions. If present:
+  * Provide instructions for removing the older versions
+  * Offer to immediately remove the older versions
+  * (Based on user config/options) Automatically remove documentation of outdated package versions, with option to keep older versions
 * Handle "** (MatchError) no match of right hand side value: {:error, :eacces}\n    (hex 2.0.6) lib/mix/tasks/hex.docs.ex:377: Mix.Tasks.Hex.Docs.extract_docs/2\n    (mix 1.16.1) lib/mix/task.ex:478: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.16.1) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /Users/jameslavin/.asdf/installs/elixir/1.16.1-otp-26/bin/mix:2: (file)"
 * Recommend grep command that doesn't generate so many "grep: /home/.../.hex/docs/hexpm/mist/4.0.7/fonts/ubuntu-mono-v15-regular-latin.woff2: Permission denied"
 * Improve the new unified command-line API
 * `elixir local_docs.exs list` could display (perhaps optionally) the individual and total size of downloaded documentation
 * Function for listing all desired packages without downloaded documentation
 * Option to load only the top-N popular packages from `popular_packages.txt`
-* Automatically remove documentation of outdated package versions, with option to keep older versions
 * Display "amqp_client/4.0.3" as "amqp_client (4.0.3)"?
 * Regularly update `popular_packages.txt` from current https://hex.pm/packages
 * Create `awesome_packages.txt` package list containing all packages in https://github.com/h4cc/awesome-elixir?
@@ -314,5 +317,5 @@ To ensure you always have the latest documentation, you might create a cron job 
 
 ## Author
 
-`LocalHexdocs` was created by James Lavin, an [Elixir](https://elixir-lang.org/) programmer who also loves [R (statistics)](https://www.r-project.org/), [Linux](https://www.linux.org/), [PostgreSQL](https://www.postgresql.org/), and running his [Kubernetes](https://kubernetes.io/)+[Cilium](https://cilium.io/)+[Helm](https://helm.sh/)+[Podman](https://podman.io/)+[CloudNativePG](https://cloudnative-pg.io/)+[Cert-manager](https://cert-manager.io/) cluster.
+`LocalHexdocs` was created by [James Lavin](https://www.jameslavin.com), an [Elixir](https://elixir-lang.org/) programmer who also loves [R (statistics)](https://www.r-project.org/), [Linux](https://www.linux.org/), [PostgreSQL](https://www.postgresql.org/), and running his [Kubernetes](https://kubernetes.io/)+[Cilium](https://cilium.io/)+[Helm](https://helm.sh/)+[Podman](https://podman.io/)+[CloudNativePG](https://cloudnative-pg.io/)+[Cert-manager](https://cert-manager.io/) cluster.
 

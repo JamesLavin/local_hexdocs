@@ -2,7 +2,7 @@
 
 `LocalHexdocs` is a simple Elixir script allowing you to easily save and update [Hexdocs](https://hexdocs.pm/) files locally on your machine so you always have the most recent documentation for any Elixir, Erlang, or Gleam packages you might want to view.
 
-List your desired Hexdocs packages in one or more files (in a `/packages` subdirectory... or use the provided `default_packages.txt` file), then fetch the lastest Hexdocs for all packages to your local machine with:
+List your desired Hexdocs packages in one or more files (in a `/packages` subdirectory... or automatically use the provided `default_packages.txt` file), then fetch the lastest Hexdocs for all packages to your local machine with:
 
 ```
 elixir local_docs.exs get
@@ -100,7 +100,7 @@ cp default_packages.txt packages/packages.txt
 
 It doesn't matter whether you create your own file(s) or copy files from elsewhere.
 
-You can name these files anything you want. All files in the `/packages` directory will be combined (and package names de-duped).
+You can name these files anything you want. All files in the `/packages` directory will be combined (and the concatenated list of package names de-duped). So you could include, for example, a list of packages you personally use, a list of packages your company uses, and a copy of `popular_packages.txt`.
 
 You can modify the files' content by adding/removing package names (one package per line) and/or adding comments (starting with #"). For example:
 

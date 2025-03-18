@@ -13,6 +13,29 @@ Once downloaded, you can:
 * [Search your documents using `grep` or something similar](#searching-through-your-local-hexdocs-files)
 * [List your downloaded packages](#listing-hex-packages-with-downloaded-documentation)
 
+You can also:
+
+* List all packages with installed Hexdocs docs:
+```
+elixir local_docs.exs list
+```
+* List all versions of all packages with installed Hexdocs docs:
+```
+elixir local_docs.exs versions
+```
+* List all packages with multiple Hexdocs docs versions installed:
+```
+elixir local_docs.exs multiple_versions
+```
+* See which package version directories `clean` would delete with:
+```
+elixir local_docs.exs to_clean
+```
+* Delete older Hexdocs versions with:
+```
+elixir local_docs.exs clean
+```
+
 ## Runs on Linux & Mac. Untested on Windows
 
 I have tested `LocalHexdocs` on my own Linux and Mac machines but own no Windows machines and am unable to test on Windows.
@@ -296,7 +319,6 @@ To ensure you always have the latest documentation, you might create a cron job 
 * Function for listing all desired packages without downloaded documentation
 * Option to load only the top-N popular packages from `popular_packages.txt`
 * Automatically remove documentation of outdated package versions, with option to keep older versions
-* Command for manually removing documentation of outdated package versions
 * Display "amqp_client/4.0.3" as "amqp_client (4.0.3)"?
 * Regularly update `popular_packages.txt` from current https://hex.pm/packages
 * Create `awesome_packages.txt` package list containing all packages in https://github.com/h4cc/awesome-elixir?

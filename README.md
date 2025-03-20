@@ -270,7 +270,28 @@ Packages with multiple Hexdocs versions in /home/user_name/.hex/docs/hexpm: [
     keep: "2.15.2",
     package: "appsignal",
     delete_dirs: ["/home/user_name/.hex/docs/hexpm/appsignal/2.15.1"]
-  }
+  },
+  %{
+    delete: ["3.4.68"],
+    keep: "3.4.69",
+    package: "ash",
+    delete_dirs: ["/home/mateusz/.hex/docs/hexpm/ash/3.4.68"]
+  },
+  ...
+  %{
+    delete: ["4.12.0", "4.13.0"],
+    keep: "5.0.0",
+    package: "prometheus",
+    delete_dirs: ["/home/mateusz/.hex/docs/hexpm/prometheus/4.12.0",
+     "/home/mateusz/.hex/docs/hexpm/prometheus/4.13.0"]
+  },
+  %{
+    delete: ["0.5.8"],
+    keep: "0.5.9",
+    package: "req",
+    delete_dirs: ["/home/mateusz/.hex/docs/hexpm/req/0.5.8"]
+  },
+  ...
 ]
 ```
 
@@ -280,10 +301,16 @@ To delete the directories listed in `delete_dirs`, run:
 elixir local_docs.exs clean
 ```
 
-This should return
+This should return:
 ```
 "Deleting /home/user_name/.hex/docs/hexpm/absinthe/1.7.8"
 "Deleting /home/user_name/.hex/docs/hexpm/appsignal/2.15.1"
+"Deleting /home/mateusz/.hex/docs/hexpm/ash/3.4.68"
+...
+"Deleting /home/mateusz/.hex/docs/hexpm/prometheus/4.12.0"
+"Deleting /home/mateusz/.hex/docs/hexpm/prometheus/4.13.0"
+"Deleting /home/mateusz/.hex/docs/hexpm/req/0.5.8"
+...
 ```
 
 ### Updating your Hexdocs documentation

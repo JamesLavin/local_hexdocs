@@ -1,2 +1,4 @@
 packages.txt
 packages/*
+_build/*
+deps/*

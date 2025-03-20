@@ -1,5 +1,5 @@
-Code.require_file("./local_hexdocs.ex")
-Code.ensure_loaded(LocalHexdocs)
+# Code.require_file("./lib/local_hexdocs.ex")
+Code.ensure_all_loaded([LocalHexdocs.Helpers, LocalHexdocs])
 
 {_parsed_switches_kw_list, args_list, _invalid_opts} =
   System.argv()
@@ -26,14 +26,14 @@ cond do
 
   true ->
     IO.puts("I am unable to determine what you want to do.\n")
-    IO.puts("To download Hexdocs documentation, run 'elixir local_docs.exs get'\n")
-    IO.puts("To list all packages with downloaded Hexdocs, run 'elixir local_docs.exs list'")
+    IO.puts("To download Hexdocs documentation, run 'mix run local_docs.exs get'\n")
+    IO.puts("To list all packages with downloaded Hexdocs, run 'mix run local_docs.exs list'")
 
     IO.puts(
-      "To list all packages, each with a list of all downloaded Hexdocs versions, run 'elixir local_docs.exs versions'"
+      "To list all packages, each with a list of all downloaded Hexdocs versions, run 'mix run local_docs.exs versions'"
     )
 
     IO.puts(
-      "To list all packages with multiple downloaded Hexdocs versions, run 'elixir local_docs.exs multiple_versions'"
+      "To list all packages with multiple downloaded Hexdocs versions, run 'mix run local_docs.exs multiple_versions'"
     )
 end

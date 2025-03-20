@@ -1,0 +1,3 @@
+ecto_psql_extras
+ecto_sql
+ecto_sqlite3

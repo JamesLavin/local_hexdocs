@@ -23,8 +23,16 @@ defmodule LocalDocsTest do
     assert Helpers.mix_env() == :test
   end
 
-  test "packages_dir is set correctly" do
+  test "packages_dir is set correctly for testing" do
     assert LocalHexdocs.packages_dir() == "./test/packages"
+  end
+
+  test "hexpm_dir is correct for test mode" do
+    assert Helpers.hexpm_dir() == "./test/.hex/docs/hexpm" |> Path.expand()
+  end
+
+  test "LocalDocs knows it's running in test mode" do
+    assert Helpers.running_tests?()
   end
 
   test "packages_files is set correctly when user hasn't specified any package files" do
@@ -53,22 +61,15 @@ defmodule LocalDocsTest do
     filepath2 = "./test/packages/my_packages2"
     create_file(filepath2, content2)
 
-    assert LocalHexdocs.packages_files |> Enum.map(&Path.expand/1) |> Enum.sort() == [filepath |> Path.expand(), filepath2 |> Path.expand()] |> Enum.sort()
+    assert LocalHexdocs.packages_files() |> Enum.map(&Path.expand/1) |> Enum.sort() ==
+             [filepath |> Path.expand(), filepath2 |> Path.expand()] |> Enum.sort()
 
     # delete test packages file
     delete_file(filepath)
     delete_file(filepath2)
   end
 
-  test "hexpm_dir is correct for test mode" do
-    assert Helpers.hexpm_dir == "./test/.hex/docs/hexpm" |> Path.expand()
-  end
-
-  test "LocalDocs knows it's running in test mode" do
-    assert Helpers.running_tests?()
-  end
-
-  test "gets Hexdocs for valid package names" do
+  test "gets Hexdocs for valid package names; doesn't re-fetch on 2nd get" do
     content = "elixir\nphoenix"
     filepath = "./test/packages/my_packages"
     create_file(filepath, content)
@@ -81,20 +82,50 @@ defmodule LocalDocsTest do
                "Docs already fetched" => [],
                "Docs fetched" => :any_list,
                "No package with name" => []
-             }, result)
+             },
+             result
+           )
 
-    assert result["Docs fetched"] == ["elixir/1.17.3", "phoenix/1.7.20"]
+    docs_fetched_1 = result["Docs fetched"]
 
     assert output =~
              "\"Docs fetched: ./test/.hex/docs/hexpm/elixir/"
+
     assert output =~
              "\"\n\"Docs fetched: ./test/.hex/docs/hexpm/phoenix/"
+
     assert output =~
              "\"\n%{\n  \"Couldn't find docs\" => [],\n  \"Docs already fetched\" => [],\n  \"Docs fetched\" => [\"elixir/"
+
     assert output =~
-             "\", \"phoenix/1.7.20\"],\n  \"No package with name\" => []\n}\n"
+             "\", \"phoenix/"
+
+    assert output =~
+             "\"],\n  \"No package with name\" => []\n}\n"
 
     assert LocalHexdocs.downloaded_packages() == ["elixir", "phoenix"]
+
+    assert [{:elixir, [elixir_version]}, {:phoenix, [phoenix_version]}] =
+             LocalHexdocs.display_downloaded_packages_with_versions()
+
+    assert docs_fetched_1 == ["elixir/#{elixir_version}", "phoenix/#{phoenix_version}"]
+
+    {result2, output2} = with_io(fn -> LocalHexdocs.fetch_all() end)
+
+    assert RSM.matches?(
+             %{
+               "Couldn't find docs" => [],
+               "Docs already fetched" => :any_list,
+               "Docs fetched" => [],
+               "No package with name" => []
+             },
+             result2
+           )
+
+    assert docs_fetched_1 == result2["Docs already fetched"]
+
+    assert output2 ==
+             "\"Docs already fetched: ./test/.hex/docs/hexpm/elixir/#{elixir_version}\"\n\"Docs already fetched: ./test/.hex/docs/hexpm/phoenix/#{phoenix_version}\"\n%{\n  \"Couldn't find docs\" => [],\n  \"Docs already fetched\" => [\"elixir/#{elixir_version}\", \"phoenix/#{phoenix_version}\"],\n  \"Docs fetched\" => [],\n  \"No package with name\" => []\n}\n"
 
     # assert LocalHexdocs.display_downloaded_packages_with_versions() == ["elixir", "phoenix"]
 

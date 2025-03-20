@@ -1,4 +1,4 @@
-Code.require_file("./local_hexdocs.ex")
+Code.require_file("./lib/local_hexdocs.ex")
 Code.ensure_all_loaded([LocalHexdocs.Helpers, LocalHexdocs])
 
 {_parsed_switches_kw_list, args_list, _invalid_opts} =

@@ -353,6 +353,23 @@ To ensure you always have the latest documentation, you might create a cron job 
 * Create `awesome_packages.txt` package list containing all packages in https://github.com/h4cc/awesome-elixir?
 * Should more be done to further avoid pounding `hexdocs.pm` and avoid triggering rate limiting (e.g., pausing between pulls) or is it okay now that I've suppressed parallelization by default?
 
+## Installation
+
+If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+by adding `local_hexdocs` to your list of dependencies in `mix.exs`:
+
+```elixir
+def deps do
+  [
+    {:local_hexdocs, "~> 0.1.0"}
+  ]
+end
+```
+
+Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
+and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
+be found at <https://hexdocs.pm/local_hexdocs>.
+
 ## Author
 
 `LocalHexdocs` was created by [James Lavin](https://www.jameslavin.com), an [Elixir](https://elixir-lang.org/) programmer who also loves [R (statistics)](https://www.r-project.org/), [Linux](https://www.linux.org/), [PostgreSQL](https://www.postgresql.org/), and running his [Kubernetes](https://kubernetes.io/)+[Cilium](https://cilium.io/)+[Helm](https://helm.sh/)+[Podman](https://podman.io/)+[CloudNativePG](https://cloudnative-pg.io/)+[Cert-manager](https://cert-manager.io/) cluster.

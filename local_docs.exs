@@ -1,5 +1,5 @@
 Code.require_file("./local_hexdocs.ex")
-Code.ensure_loaded(LocalHexdocs)
+Code.ensure_all_loaded([LocalHexdocs.Helpers, LocalHexdocs])
 
 {_parsed_switches_kw_list, args_list, _invalid_opts} =
   System.argv()

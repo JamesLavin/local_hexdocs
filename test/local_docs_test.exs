@@ -8,11 +8,45 @@ require Logger
 defmodule LocalDocsTest do
   use ExUnit.Case, async: false
 
+  setup do
+    create_test_hexpm_dir()
+
+    on_exit(fn ->
+      clear_test_hexpm_dir()
+    end)
+  end
+
   test "LocalDocs knows it's running in test mode" do
     assert LocalHexdocs.running_tests?()
   end
 
-  test "this works" do
+  test "gets Hexdocs for valid package names" do
+    content = "elixir\nphoenix"
+    filepath = "./packages/my_packages"
+    create_file(filepath, content)
+
+    {result, output} = with_io(fn -> LocalHexdocs.fetch_all() end)
+
+    assert result ==
+             %{
+               "Couldn't find docs" => [],
+               "Docs already fetched" => [],
+               "Docs fetched" => ["elixir", "phoenix"],
+               "No package with name" => []
+             }
+
+    assert output ==
+             "\"No package with name does_not_exist\"\n\"No package with name not_a_real_package\"\n%{\n  \"Couldn't find docs\" => [],\n  \"Docs already fetched\" => [],\n  \"Docs fetched\" => [],\n  \"No package with name\" => [\"does_not_exist\", \"not_a_real_package\"]\n}\n"
+
+    assert LocalHexdocs.downloaded_packages() == ["elixir", "phoenix"]
+
+    # assert LocalHexdocs.display_downloaded_packages_with_versions() == ["elixir", "phoenix"]
+
+    delete_file(filepath)
+    delete_test_packages()
+  end
+
+  test "handles invalid package names" do
     content = "does_not_exist\nnot_a_real_package"
     filepath = "./packages/my_packages"
     create_file(filepath, content)
@@ -33,9 +67,30 @@ defmodule LocalDocsTest do
     delete_file(filepath)
   end
 
-  def create_file(filepath, content) when is_binary(filepath) and is_binary(content) do
-    filepath
+  def create_test_hexpm_dir do
+    "./.hex/docs/hexpm"
     |> Path.expand()
+    |> File.mkdir_p()
+  end
+
+  def clear_test_hexpm_dir do
+    "./.hex/docs/hexpm/*"
+    |> Path.expand()
+    |> File.rm()
+  end
+
+  def delete_test_packages do
+    "./test_hexpm/"
+  end
+
+  def create_file(filepath, content) when is_binary(filepath) and is_binary(content) do
+    abs_filepath = filepath |> Path.expand()
+
+    if File.exists?(abs_filepath) do
+      File.rm!(abs_filepath)
+    end
+
+    abs_filepath
     |> File.write!(content)
   end
 

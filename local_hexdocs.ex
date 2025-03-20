@@ -16,6 +16,12 @@ defmodule LocalHexdocs do
 
   See [README.md](https://github.com/JamesLavin/local_hexdocs/blob/main/README.md) for more details
   """
+  Code.require_file("./local_hexdocs_helpers.ex")
+
+  Code.ensure_loaded!(LocalHexdocs.Helpers)
+  |> IO.inspect(label: "module")
+
+  import LocalHexdocs.Helpers
 
   # Number of parallel threads used to pull documentation. The higher this number,
   # the greater the load placed on `hexdocs.pm` and the greater your odds of getting rate limited
@@ -23,6 +29,16 @@ defmodule LocalHexdocs do
 
   @timeout_ms 30_000
 
+  @running_tests? "local_hexdocs/tests" == File.cwd!() |> path_end()
+
+  @hex_home (if(@running_tests?) do
+               "./.hex"
+             else
+               "~/.hex"
+             end)
+
+  # default `HEX_HOME` is ~/.hex
+  # `HEX_HOME` can be overridden
   @mix_path :os.cmd(~c(which mix)) |> Path.expand() |> String.trim()
 
   @doc """
@@ -51,7 +67,8 @@ defmodule LocalHexdocs do
   def fetch_all do
     stream =
       desired_packages()
-      |> Task.async_stream(fn lib -> :os.cmd(~c(#{@mix_path} hex.docs fetch #{lib})) end,
+      |> Task.async_stream(
+        fn lib -> :os.cmd(~c(HEX_HOME=#{@hex_home} #{@mix_path} hex.docs fetch #{lib})) end,
         timeout: @timeout_ms,
         max_concurrency: @max_concurrency
       )
@@ -336,26 +353,6 @@ defmodule LocalHexdocs do
   defp rate_limited?(resp) do
     elem(resp, 0) == :ok &&
       String.match?(elem(resp, 1) |> to_string(), ~r/rate limit exceeded for IP /)
-  end
-
-  defp hexpm_dir do
-    if running_tests?() do
-      "./test_hexpm" |> Path.expand()
-    else
-      # script is executing normally
-      "~/.hex/docs/hexpm/" |> Path.expand()
-    end
-  end
-
-  def running_tests? do
-    "local_hexdocs/tests" == File.cwd!() |> path_end()
-  end
-
-  defp path_end(string_path) when is_binary(string_path) do
-    list = string_path |> String.split("/")
-    {last, rest} = list |> List.pop_at(-1)
-    {prev, _rest2} = rest |> List.pop_at(-1)
-    "#{prev}/#{last}"
   end
 
   # IMPROVE

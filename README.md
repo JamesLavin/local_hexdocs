@@ -80,7 +80,7 @@ git pull origin main
 
 After cloning this repository, `cd` into it and specify which Elixir packages you wish to pull documentation for.
 
-If you do nothing, running `mix run local_docs.exs get` in this directory will download all Hexdoc files for packages listed in the provided `default_packages.txt`. (There's nothing magical about `default_packages.txt`, which was simply my initial list of desired packages.)
+If you do nothing, running `mix run local_docs.exs get` in this directory will download all Hexdoc files for packages listed in the provided `default_packages.txt`. (There's nothing magical about the packages listed in `default_packages.txt`, they were merely my personal list of desired packages when I started this project.)
 
 You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") package names, but this may make it hard to update this project in the future, so I recommend that you:
 

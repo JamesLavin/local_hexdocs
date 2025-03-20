@@ -1,11 +1,28 @@
 defmodule LocalHexdocs.Helpers do
   def running_tests? do
-    "local_hexdocs/tests" == File.cwd!() |> path_end()
+    mix_env() == :test
+  end
+
+  def mix_env do
+    Mix.env()
+  end
+
+  def cwd do
+    File.cwd()
+  end
+
+  def top_dir do
+    if running_tests?() do
+      "./test/" |> Path.expand()
+    else
+      # script is executing normally
+      "~/" |> Path.expand()
+    end
   end
 
   def hexpm_dir do
     if running_tests?() do
-      "./.hex/docs/hexpm/" |> Path.expand()
+      "./test/.hex/docs/hexpm/" |> Path.expand()
     else
       # script is executing normally
       "~/.hex/docs/hexpm/" |> Path.expand()

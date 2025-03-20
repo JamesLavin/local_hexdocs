@@ -18,6 +18,8 @@ defmodule LocalHexdocs.MixProject do
   end
 
   defp deps do
-    []
+    [
+      {:recursive_selective_match, only: :test}
+    ]
   end
 end

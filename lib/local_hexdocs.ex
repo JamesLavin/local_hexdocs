@@ -16,10 +16,7 @@ defmodule LocalHexdocs do
 
   See [README.md](https://github.com/JamesLavin/local_hexdocs/blob/main/README.md) for more details
   """
-  # Code.require_file("./local_hexdocs_helpers.ex")
-
-  # Code.ensure_loaded!(LocalHexdocs.Helpers)
-  # |> IO.inspect(label: "module")
+  Code.ensure_loaded!(LocalHexdocs.Helpers)
 
   import LocalHexdocs.Helpers
 
@@ -29,10 +26,8 @@ defmodule LocalHexdocs do
 
   @timeout_ms 30_000
 
-  @running_tests? "local_hexdocs/tests" == File.cwd!() |> path_end()
-
-  @hex_home (if(@running_tests?) do
-               "./.hex"
+  @hex_home (if(running_tests?()) do
+               "./test/.hex"
              else
                "~/.hex"
              end)
@@ -65,6 +60,8 @@ defmodule LocalHexdocs do
   Called by `local_docs.exs get`
   """
   def fetch_all do
+      desired_packages()
+
     stream =
       desired_packages()
       |> Task.async_stream(
@@ -149,6 +146,29 @@ defmodule LocalHexdocs do
       limit: :infinity,
       printable_limit: :infinity
     )
+  end
+
+  def packages_dir do
+    if running_tests?() do
+      "./test/packages"
+    else
+    "./packages"
+    end
+  end
+
+  def packages_files do
+    packages_dir = packages_dir()
+
+    case Path.expand(packages_dir) |> File.ls() do
+      {:ok, []} ->
+        packages_file()
+
+      {:ok, user_files} ->
+        user_files |> Enum.map(fn filename -> Path.join(packages_dir(), filename) end)
+
+      {:error, _err} ->
+        packages_file()
+    end
   end
 
   defp package_name_plus_versions(name) do
@@ -263,25 +283,19 @@ defmodule LocalHexdocs do
     |> Enum.reject(&String.starts_with?(&1, "#"))
   end
 
-  defp packages_files do
-    case Path.expand("./packages") |> File.ls() do
-      {:ok, []} ->
-        packages_file()
-
-      {:ok, user_files} ->
-        user_files |> Enum.map(fn filename -> Path.join(Path.expand("./packages"), filename) end)
-
-      {:error, _err} ->
-        packages_file()
-    end
-  end
-
   # Use packages.txt if it exists or default_packages.txt otherwise
   defp packages_file do
-    ["packages.txt", "default_packages.txt"]
-    |> Enum.find(fn file -> Path.join(File.cwd!(), file) |> File.exists?() end)
-    |> Path.expand()
-    |> List.wrap()
+    file = ["packages.txt", "default_packages.txt"]
+      |> Enum.map(&Path.join(top_dir(), &1))
+      |> Enum.find(&File.exists?/1)
+
+    if file do
+      file
+      |> Path.expand()
+      |> List.wrap()
+    else
+      []
+    end
   end
 
   defp process_list(list) when is_list(list) do

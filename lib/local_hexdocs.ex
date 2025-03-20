@@ -16,10 +16,10 @@ defmodule LocalHexdocs do
 
   See [README.md](https://github.com/JamesLavin/local_hexdocs/blob/main/README.md) for more details
   """
-  Code.require_file("./local_hexdocs_helpers.ex")
+  # Code.require_file("./local_hexdocs_helpers.ex")
 
-  Code.ensure_loaded!(LocalHexdocs.Helpers)
-  |> IO.inspect(label: "module")
+  # Code.ensure_loaded!(LocalHexdocs.Helpers)
+  # |> IO.inspect(label: "module")
 
   import LocalHexdocs.Helpers
 

@@ -160,7 +160,18 @@ It contains four keys, each with a list of package names, like:
 
 ### Serving & viewing your local Hexdocs files
 
-After downloading your Hexdoc files, one way to view them is using `caddy file-server` (see: [CaddyServer.com](https://caddyserver.com/) and [the Caddy Github repo](https://github.com/caddyserver/caddy)). The following will serve your Hexdocs on port 8888 (assuming your `hexpm` directory is at `~/.hex/docs/hexpm`):
+After downloading your Hexdoc files, you'll want to view them.
+
+#### Viewing Hexdocs for one package
+
+Hex.docs makes it easy to view -- in your default browser -- Hexdocs for a particular package with:
+```
+mix hex.docs offline PACKAGE_NAME
+```
+
+#### Viewing Hexdocs for all packages
+
+One way to browse and view Hexdocs for *all* your packages is with `caddy file-server` (see: [CaddyServer.com](https://caddyserver.com/) and [the Caddy Github repo](https://github.com/caddyserver/caddy)). The following will serve your Hexdocs on port 8888 (assuming your `hexpm` directory is at `~/.hex/docs/hexpm`):
 
 ```
 cd ~/.hex/docs/hexpm

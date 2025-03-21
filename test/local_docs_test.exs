@@ -135,6 +135,102 @@ defmodule LocalDocsTest do
     delete_file(filepath)
   end
 
+  test "display_package_versions_to_remove" do
+    dirs = [
+      "./test/.hex/docs/hexpm/elixir/0.1.1",
+      "./test/.hex/docs/hexpm/elixir/1.1.1",
+      "./test/.hex/docs/hexpm/elixir/1.2.1",
+      "./test/.hex/docs/hexpm/elixir/1.2.3",
+      "./test/.hex/docs/hexpm/elixir/2.0.4",
+      "./test/.hex/docs/hexpm/elixir/2.1.2",
+      "./test/.hex/docs/hexpm/elixir/2.1.1"
+    ]
+
+    dirs |> Enum.each(&File.mkdir_p/1)
+
+    expected_result = [
+      %{
+        delete: ["0.1.1", "1.1.1", "1.2.1", "1.2.3", "2.0.4", "2.1.1"],
+        keep: "2.1.2",
+        package: "elixir",
+        delete_dirs: [
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/0.1.1",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.1.1",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.2.1",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.2.3",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/2.0.4",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/2.1.1"
+        ]
+      }
+    ]
+
+    expected_output =
+      "Packages with multiple Hexdocs versions in /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm: [\n  %{\n    delete: [\"0.1.1\", \"1.1.1\", \"1.2.1\", \"1.2.3\", \"2.0.4\", \"2.1.1\"],\n    keep: \"2.1.2\",\n    package: \"elixir\",\n    delete_dirs: [\"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/0.1.1\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.1.1\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.2.1\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.2.3\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/2.0.4\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/2.1.1\"]\n  }\n]\n"
+
+    {result, output} = with_io(fn -> LocalHexdocs.display_package_versions_to_remove() end)
+
+    assert result == expected_result
+    assert output == expected_output
+  end
+
+  test "remove_stale_versions" do
+    dirs = [
+      "./test/.hex/docs/hexpm/nx/3.2.0",
+      "./test/.hex/docs/hexpm/nx/3.1.99",
+      "./test/.hex/docs/hexpm/nx/0.55.55",
+      "./test/.hex/docs/hexpm/nx/1.1.1",
+      "./test/.hex/docs/hexpm/nx/1.2.1",
+      "./test/.hex/docs/hexpm/nx/1.2.3",
+      "./test/.hex/docs/hexpm/nx/2.0.4",
+      "./test/.hex/docs/hexpm/nx/2.11.2",
+      "./test/.hex/docs/hexpm/nx/2.1.1"
+    ]
+
+    dirs |> Enum.each(&File.mkdir_p/1)
+
+    expected_result = [
+      %{
+        delete: ["3.1.99", "0.55.55", "1.1.1", "1.2.1", "1.2.3", "2.0.4", "2.11.2", "2.1.1"],
+        delete_dirs: [
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/3.1.99",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/0.55.55",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.1.1",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.1",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.3",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.0.4",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.11.2",
+          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.1.1"
+        ],
+        keep: "3.2.0",
+        package: "nx"
+      }
+    ]
+
+    expected_output =
+      "Packages with multiple Hexdocs versions in /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm: [\n  %{\n    delete: [\"3.1.99\", \"0.55.55\", \"1.1.1\", \"1.2.1\", \"1.2.3\", \"2.0.4\", \"2.11.2\",\n     \"2.1.1\"],\n    keep: \"3.2.0\",\n    package: \"nx\",\n    delete_dirs: [\"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/3.1.99\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/0.55.55\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.1.1\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.1\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.3\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.0.4\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.11.2\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.1.1\"]\n  }\n]\n"
+
+    {result, output} = with_io(fn -> LocalHexdocs.display_package_versions_to_remove() end)
+
+    assert result == expected_result
+    assert output == expected_output
+
+    {result2, output2} = with_io(fn -> LocalHexdocs.remove_stale_versions() end)
+
+    expected_result2 = :ok
+
+    expected_output2 =
+      "\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/3.1.99\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/0.55.55\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.1.1\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.1\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.3\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.0.4\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.11.2\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.1.1\"\n"
+
+    assert result2 == expected_result2
+    assert output2 == expected_output2
+
+    {result3, output3} =
+      with_io(fn -> LocalHexdocs.display_downloaded_packages_with_versions() end)
+
+    assert result3 == [nx: ["3.2.0"]]
+    assert output3 == "Packages downloaded in #{Helpers.hexpm_dir()}: [nx: [\"3.2.0\"]]\n"
+  end
+
   test "handles invalid package names" do
     content = "does_not_exist\nnot_a_real_package"
     filepath = "./test/packages/my_packages"

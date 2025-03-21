@@ -26,14 +26,14 @@ defmodule LocalHexdocs do
 
   @timeout_ms 30_000
 
+  # default `HEX_HOME` is ~/.hex
+  # `HEX_HOME` can be overridden. See: https://hexdocs.pm/hex/Mix.Tasks.Hex.Config.html
   @hex_home (if(running_tests?()) do
                "./test/.hex"
              else
                "~/.hex"
              end)
 
-  # default `HEX_HOME` is ~/.hex
-  # `HEX_HOME` can be overridden
   @mix_path :os.cmd(~c(which mix)) |> Path.expand() |> String.trim()
 
   @doc """
@@ -60,8 +60,6 @@ defmodule LocalHexdocs do
   Called by `local_docs.exs get`
   """
   def fetch_all do
-      desired_packages()
-
     stream =
       desired_packages()
       |> Task.async_stream(
@@ -152,7 +150,7 @@ defmodule LocalHexdocs do
     if running_tests?() do
       "./test/packages"
     else
-    "./packages"
+      "./packages"
     end
   end
 
@@ -285,7 +283,8 @@ defmodule LocalHexdocs do
 
   # Use packages.txt if it exists or default_packages.txt otherwise
   defp packages_file do
-    file = ["packages.txt", "default_packages.txt"]
+    file =
+      ["packages.txt", "default_packages.txt"]
       |> Enum.map(&Path.join(top_dir(), &1))
       |> Enum.find(&File.exists?/1)
 

@@ -127,7 +127,10 @@ defmodule LocalDocsTest do
     assert output2 ==
              "\"Docs already fetched: ./test/.hex/docs/hexpm/elixir/#{elixir_version}\"\n\"Docs already fetched: ./test/.hex/docs/hexpm/phoenix/#{phoenix_version}\"\n%{\n  \"Couldn't find docs\" => [],\n  \"Docs already fetched\" => [\"elixir/#{elixir_version}\", \"phoenix/#{phoenix_version}\"],\n  \"Docs fetched\" => [],\n  \"No package with name\" => []\n}\n"
 
-    # assert LocalHexdocs.display_downloaded_packages_with_versions() == ["elixir", "phoenix"]
+    assert [{:elixir, [^elixir_version]}, {:phoenix, [^phoenix_version]}] =
+             LocalHexdocs.display_downloaded_packages_with_versions()
+
+    assert [] = LocalHexdocs.display_package_versions_to_remove()
 
     delete_file(filepath)
   end

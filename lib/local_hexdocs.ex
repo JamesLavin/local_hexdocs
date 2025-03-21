@@ -159,13 +159,15 @@ defmodule LocalHexdocs do
 
     case Path.expand(packages_dir) |> File.ls() do
       {:ok, []} ->
-        packages_file()
+        packages_file_as_list()
 
       {:ok, user_files} ->
-        user_files |> Enum.map(fn filename -> Path.join(packages_dir(), filename) end)
+        user_files
+        |> Enum.map(fn filename -> Path.join(packages_dir(), filename) end)
+        |> Enum.map(&Path.expand/1)
 
       {:error, _err} ->
-        packages_file()
+        packages_file_as_list()
     end
   end
 
@@ -282,7 +284,7 @@ defmodule LocalHexdocs do
   end
 
   # Use packages.txt if it exists or default_packages.txt otherwise
-  defp packages_file do
+  defp packages_file_as_list do
     file =
       ["packages.txt", "default_packages.txt"]
       |> Enum.map(&Path.join(top_dir(), &1))

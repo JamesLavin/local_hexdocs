@@ -377,7 +377,7 @@ And, if things go well, you can see exactly what your script did:
   * Provide instructions for removing the older versions
   * Offer to immediately remove the older versions
   * (Based on user config/options) Automatically remove documentation of outdated package versions, with option to keep older versions
-* Handle "** (MatchError) no match of right hand side value: {:error, :eacces}\n    (hex 2.0.6) lib/mix/tasks/hex.docs.ex:377: Mix.Tasks.Hex.Docs.extract_docs/2\n    (mix 1.16.1) lib/mix/task.ex:478: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.16.1) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /Users/jameslavin/.asdf/installs/elixir/1.16.1-otp-26/bin/mix:2: (file)"
+* Handle "** (MatchError) no match of right hand side value: {:error, :eacces}\n    (hex 2.0.6) lib/mix/tasks/hex.docs.ex:377: Mix.Tasks.Hex.Docs.extract_docs/2\n    (mix 1.16.1) lib/mix/task.ex:478: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.16.1) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /Users/user_name/.asdf/installs/elixir/1.16.1-otp-26/bin/mix:2: (file)"
 * Recommend grep command that doesn't generate so many "grep: /home/.../.hex/docs/hexpm/mist/4.0.7/fonts/ubuntu-mono-v15-regular-latin.woff2: Permission denied"
 * Improve the new unified command-line API
 * `mix run local_docs.exs list` could display (perhaps optionally) the individual and total size of downloaded documentation
@@ -387,23 +387,6 @@ And, if things go well, you can see exactly what your script did:
 * Regularly update `popular_packages.txt` from current https://hex.pm/packages
 * Create `awesome_packages.txt` package list containing all packages in https://github.com/h4cc/awesome-elixir?
 * Should more be done to further avoid pounding `hexdocs.pm` and avoid triggering rate limiting (e.g., pausing between pulls) or is it okay now that I've suppressed parallelization by default?
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `local_hexdocs` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:local_hexdocs, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/local_hexdocs>.
 
 ## Tests
 

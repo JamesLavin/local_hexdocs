@@ -1,14 +1,16 @@
 # LocalHexdocs
 
-`LocalHexdocs` is a simple Elixir script allowing you to easily save and update [Hexdocs](https://hexdocs.pm/) files locally on your machine so you always have the most recent documentation for any Elixir, Erlang, or Gleam packages you might want to view.
+`LocalHexdocs` is a Mix task for easily saving and updating [Hexdocs](https://hexdocs.pm/) files locally on your machine so you always have the most recent documentation for any Elixir, Erlang, or Gleam packages you might want to view.
 
-List your desired Hexdocs packages in one or more files (in a `/packages` subdirectory... or automatically use the provided `default_packages.txt` file), then fetch the lastest Hexdocs for all packages to your local machine with:
+[Clone this repository](https://github.com/jameslavin/local_hexdocs?tab=readme-ov-file#pulling-down-this-repository), create a `/packages` subdirectory, then list your desired Hexdocs packages (one per line) in one or more files (named anything you wish) inside this `/packages` subdirectory, then fetch the lastest Hexdocs for all packages to your local machine with:
 
 ```
 mix run local_docs.exs get
 ```
 
-You can manually delete older versions of all documentation with the `clean` option (see below), but you can do a `get` followed by a `clean` with a single command:
+(Running this without `/packages` files will use the provided `default_packages.txt` file. You could also copy to `/packages` [popular_packages.txt](https://github.com/JamesLavin/local_hexdocs/blob/main/popular_packages.txt), containing the 1,110 most popular packages on hex.pm.)
+
+You can manually delete older docs versions with the `clean` option (see below) OR do a `get` AND a `clean` with a single command:
 
 ```
 mix run local_docs.exs get_then_clean
@@ -76,7 +78,7 @@ git clone https://github.com/JamesLavin/local_hexdocs.git
 
 ### Updating this repository
 
-To pull future `LocalHexdocs` updates, cd into this repository and run:
+To pull future `LocalHexdocs` updates, `cd` into this repository and run:
 
 ```
 git pull origin main

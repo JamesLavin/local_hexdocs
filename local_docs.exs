@@ -9,6 +9,10 @@ cond do
   "get" in args_list ->
     LocalHexdocs.fetch_all()
 
+  "get_then_clean" in args_list ->
+    LocalHexdocs.fetch_all()
+    LocalHexdocs.remove_stale_versions()
+
   "list" in args_list ->
     LocalHexdocs.downloaded_packages()
 

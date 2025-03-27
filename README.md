@@ -8,6 +8,12 @@ List your desired Hexdocs packages in one or more files (in a `/packages` subdir
 mix run local_docs.exs get
 ```
 
+You can manually delete older versions of all documentation with the `clean` option (see below), but you can do a `get` followed by a `clean` with a single command:
+
+```
+mix run local_docs.exs get_then_clean
+```
+
 Once downloaded, you can:
 * [View your documents using the Caddy file server or something similar](#serving--viewing-your-local-hexdocs-files)
 * [Search your documents using `grep` or something similar](#searching-through-your-local-hexdocs-files)
@@ -334,7 +340,34 @@ mix run local_docs.exs get
 
 Each time you run this, `LocalHexdocs` will pull the latest version of documentation for each specified package.
 
-To ensure you always have the latest documentation, you might create a cron job to periodically run `mix run local_docs.exs get` (...but please don't run it too frequently or you'll needlessly hammer the Hexdocs.pm server).
+## Automate the periodic running of local_hexdocs
+
+To ensure you always have the latest documentation, you can create a cron job to periodically run `mix run local_docs.exs get` (...but please don't run it too frequently or you'll needlessly hammer the Hexdocs.pm server).
+
+Before running a mix task via cron as a user, you may need to `cd` into your `local_hexdocs` directory and specify your `$PATH`. I use `.asdf`, and the following works for me on Fedora (which includes user cron jobs inside `/etc/crontab` but requires you to specify the user name... In Debian/Ubuntu, I instead used a user-specific cron file -- via `crontab -e` -- and did NOT specify the user_name in my cron file). The 5 below means 5 a.m. and the 0 specifies Sunday, so I run my job once per week:
+
+```
+* 5 * * 0 user_name cd /home/user_name/Git/local_hexdocs; PATH=[YOUR_$PATH] /home/user_name/.asdf/shims/mix run /home/user_name/Git/local_hexdocs/local_docs.exs get_then_clean >> /home/user_name/local_hexdocs.log 2>&1
+```
+
+The command above directs all output to a log file, so if anything goes wrong, you can debug your problem. E.g.,
+
+```
+$ cat ~/local_hexdocs.log 
+~/.asdf/installs/elixir/1.17.3-otp-27/bin/elixir: line 248: exec: erl: not found
+```
+
+And, if things go well, you can see exactly what your script did:
+```
+...
+"Docs already fetched: /home/user_name/.hex/docs/hexpm/mix_audit/2.1.4"
+"Docs fetched: /home/user_name/.hex/docs/hexpm/mix_test_interactive/4.3.0"
+"Docs already fetched: /home/user_name/.hex/docs/hexpm/mix_test_watch/1.2.0"
+"Docs already fetched: /home/user_name/.hex/docs/hexpm/mix_unused/0.4.1"
+"Docs fetched: /home/user_name/.hex/docs/hexpm/mjml/5.0.0"
+"Docs already fetched: /home/user_name/.hex/docs/hexpm/mjml_eex/0.12.0"
+...
+```
 
 ## Known issues & possible future features
 

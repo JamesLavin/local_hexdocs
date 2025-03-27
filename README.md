@@ -377,7 +377,7 @@ And, if things go well, you can see exactly what your script did:
   * Provide instructions for removing the older versions
   * Offer to immediately remove the older versions
   * (Based on user config/options) Automatically remove documentation of outdated package versions, with option to keep older versions
-* Handle "** (MatchError) no match of right hand side value: {:error, :eacces}\n    (hex 2.0.6) lib/mix/tasks/hex.docs.ex:377: Mix.Tasks.Hex.Docs.extract_docs/2\n    (mix 1.16.1) lib/mix/task.ex:478: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.16.1) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /Users/user_name/.asdf/installs/elixir/1.16.1-otp-26/bin/mix:2: (file)"
+* I hit this just once. If it recurs, figure out how to handle it: "** (MatchError) no match of right hand side value: {:error, :eacces}\n    (hex 2.0.6) lib/mix/tasks/hex.docs.ex:377: Mix.Tasks.Hex.Docs.extract_docs/2\n    (mix 1.16.1) lib/mix/task.ex:478: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.16.1) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /Users/user_name/.asdf/installs/elixir/1.16.1-otp-26/bin/mix:2: (file)"
 * Recommend grep command that doesn't generate so many "grep: /home/.../.hex/docs/hexpm/mist/4.0.7/fonts/ubuntu-mono-v15-regular-latin.woff2: Permission denied"
 * Improve the new unified command-line API
 * `mix run local_docs.exs list` could display (perhaps optionally) the individual and total size of downloaded documentation

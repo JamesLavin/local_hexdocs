@@ -373,10 +373,15 @@ And, if things go well, you can see exactly what your script did:
 
 ## Known issues & possible future features
 
-* After getting all files, look for packages with multiple versions. If present:
+* Better handle versions with non-numeric version numbers (violating semantic versioning).
+  * For now, I'm ignoring them when deciding which versions are redundant.
+  * I need to add a test.
+  * I should add an option to display all non-numeric package versions.
+  * Is it possible to never download such versions?
+* After fetching the latest files, automatically look for packages with multiple versions and, if present:
   * Provide instructions for removing the older versions
   * Offer to immediately remove the older versions
-  * (Based on user config/options) Automatically remove documentation of outdated package versions, with option to keep older versions
+  * (If user config/options has opted in) Automatically remove documentation of outdated package versions, with option to keep older versions
 * I hit this just once. If it recurs, figure out how to handle it: "** (MatchError) no match of right hand side value: {:error, :eacces}\n    (hex 2.0.6) lib/mix/tasks/hex.docs.ex:377: Mix.Tasks.Hex.Docs.extract_docs/2\n    (mix 1.16.1) lib/mix/task.ex:478: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.16.1) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /Users/user_name/.asdf/installs/elixir/1.16.1-otp-26/bin/mix:2: (file)"
 * Recommend grep command that doesn't generate so many "grep: /home/.../.hex/docs/hexpm/mist/4.0.7/fonts/ubuntu-mono-v15-regular-latin.woff2: Permission denied"
 * Improve the new unified command-line API

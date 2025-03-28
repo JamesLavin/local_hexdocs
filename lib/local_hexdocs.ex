@@ -235,6 +235,8 @@ defmodule LocalHexdocs do
   defp latest_version(list_of_version_strings) do
     list_of_version_strings
     |> Enum.map(&version_string_to_int_list/1)
+    # ignores any versions lacking a semantically valid version "number" (like "beta0")
+    |> Enum.reject(&Enum.any?(&1, fn val -> is_nil(val) end))
     |> Enum.reduce(fn version, acc ->
       if version > acc do
         version
@@ -248,7 +250,15 @@ defmodule LocalHexdocs do
   # IMPROVE: This assumes version numbers are always integers. This will break if SemVer
   #          is violated, as sometimes happens with pre-release version names.
   defp version_string_to_int_list(version_string) when is_binary(version_string) do
-    version_string |> String.split(".") |> Enum.map(&String.to_integer/1)
+    version_string
+    |> String.split(".")
+    |> Enum.map(fn list_of_strings ->
+      try do
+        list_of_strings |> String.to_integer()
+      rescue
+        _e -> nil
+      end
+    end)
   end
 
   defp int_list_to_version_string(int_list) when is_list(int_list) do

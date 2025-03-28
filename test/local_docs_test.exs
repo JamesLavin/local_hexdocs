@@ -252,6 +252,10 @@ defmodule LocalDocsTest do
     delete_file(filepath)
   end
 
+  @tag :skip
+  test "ignores non-numeric package versions (that don't follow semantic versioning)" do
+  end
+
   def recreate_test_hexpm_dir do
     clear_test_hexpm_dir()
     create_test_hexpm_dir()

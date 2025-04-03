@@ -1,5 +1,6 @@
 %{
   "atomic_map": {:hex, :atomic_map, "0.9.3", "3c7f1302e0590164732d08ca999708efbb2cd768abf2911cf140280ce2dc499d", [:mix], [], "hexpm", "c237babf301bd2435bd85b96cffc973022b4cbb7721537059ee0dd3bb74938d2"},
+  "jason": {:hex, :jason, "1.4.4", "b9226785a9aa77b6857ca22832cffa5d5011a667207eb2a0ad56adb5db443b8a", [:mix], [{:decimal, "~> 1.0 or ~> 2.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "c5eb0cab91f094599f94d55bc63409236a8ec69a21a67814529e8d5f6cc90b3b"},
   "recursive_selective_match": {:hex, :recursive_selective_match, "0.2.7", "c211d33ef1909e37540b4640cfbdf43803186c30a36d08e68126dc32196446f2", [:mix], [{:atomic_map, "~> 0.8", [hex: :atomic_map, repo: "hexpm", optional: false]}, {:utc_datetime, "~> 1.0", [hex: :utc_datetime, repo: "hexpm", optional: false]}], "hexpm", "3a38647b0366a0a2a9ed7631b197aae9ee6c9e2293c758cf6484e2bbf20f11d7"},
   "utc_datetime": {:hex, :utc_datetime, "1.0.0", "617b7bac9de12d7afd99dfbbbc3cea7534ac044996bc40ab35f5bf78ca35dc6a", [:mix], [{:ecto, ">= 3.0.0", [hex: :ecto, repo: "hexpm", optional: true]}, {:jason, ">= 1.0.0", [hex: :jason, repo: "hexpm", optional: true]}], "hexpm", "c6c7db85badc8e6133b08107c09fcee1bd7290ee868ae17924c827b9704d718e"},
 }

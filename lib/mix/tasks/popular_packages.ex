@@ -59,6 +59,6 @@ defmodule Mix.Tasks.PopularPackages do
         []
       )
 
-    body |> to_string() |> :json.decode()
+    Jason.decode!(body)
   end
 end

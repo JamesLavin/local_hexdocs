@@ -19,6 +19,7 @@ defmodule LocalHexdocs.MixProject do
 
   defp deps do
     [
+      {:jason, "~> 1.0"},
       {:recursive_selective_match, only: :test}
     ]
   end

@@ -13,12 +13,13 @@ defmodule LocalHexdocs.MixProject do
 
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger, :inets, :ssl]
     ]
   end
 
   defp deps do
     [
+      {:jason, "~> 1.0"},
       {:recursive_selective_match, only: :test}
     ]
   end

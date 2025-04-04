@@ -1,6 +1,3 @@
-# Code.require_file("./lib/local_hexdocs.ex")
-# Code.ensure_loaded(LocalHexdocs)
-
 alias LocalHexdocs.Helpers
 import ExUnit.CaptureIO
 require Logger

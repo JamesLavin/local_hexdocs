@@ -5,7 +5,7 @@
 [Clone this repository](https://github.com/jameslavin/local_hexdocs?tab=readme-ov-file#pulling-down-this-repository), create a `/packages` subdirectory, then list your desired Hexdocs packages (one per line) in one or more files (named anything you wish) inside this `/packages` subdirectory, then fetch the lastest Hexdocs for all packages to your local machine with:
 
 ```
-mix run local_docs.exs get
+mix local_docs get
 ```
 
 (Running this without `/packages` files will use the provided `default_packages.txt` file. You could also copy to `/packages` [popular_packages.txt](https://github.com/JamesLavin/local_hexdocs/blob/main/popular_packages.txt), containing the 1,110 most popular packages on hex.pm.)
@@ -13,7 +13,7 @@ mix run local_docs.exs get
 You can manually delete older docs versions with the `clean` option (see below) OR do a `get` AND a `clean` with a single command:
 
 ```
-mix run local_docs.exs get_then_clean
+mix local_docs get_then_clean
 ```
 
 Once downloaded, you can:
@@ -25,23 +25,23 @@ You can also:
 
 * List all packages with local Hexdocs:
 ```
-mix run local_docs.exs list
+mix local_docs list
 ```
 * List all versions of all packages with local Hexdocs:
 ```
-mix run local_docs.exs versions
+mix local_docs versions
 ```
 * List all packages with multiple local Hexdocs versions:
 ```
-mix run local_docs.exs multiple_versions
+mix local_docs multiple_versions
 ```
 * See which package version directories `clean` would delete:
 ```
-mix run local_docs.exs to_clean
+mix local_docs to_clean
 ```
 * Delete older Hexdocs versions with:
 ```
-mix run local_docs.exs clean
+mix local_docs clean
 ```
 
 ## Runs on Linux & Mac. Untested on Windows
@@ -88,7 +88,7 @@ git pull origin main
 
 After cloning this repository, `cd` into it and specify which Elixir packages you wish to pull documentation for.
 
-If you do nothing, running `mix run local_docs.exs get` in this directory will download all Hexdoc files for packages listed in the provided `default_packages.txt`. (There's nothing magical about the packages listed in `default_packages.txt`, they were merely my personal list of desired packages when I started this project.)
+If you do nothing, running `mix local_docs get` in this directory will download all Hexdoc files for packages listed in the provided `default_packages.txt`. (There's nothing magical about the packages listed in `default_packages.txt`, they were merely my personal list of desired packages when I started this project.)
 
 You can modify `default_packages.txt` to add, remove, or comment out (with a leading "#") package names, but this may make it hard to update this project in the future, so I recommend that you:
 
@@ -136,7 +136,7 @@ If you don't create a `/packages` directory, only `default_packages.txt` or `pac
 Once you're happy with your package configuration (whether you choose to create a `packages.txt` file or files in `/packages/` or use the `default_packages.txt` file), you can pull down the latest documentation for each package with this command, executed from the main directory:
 
 ```
-mix run local_docs.exs get
+mix local_docs get
 ```
 
 (I didn't bother creating an executable binary since anyone wanting to download Hexdocs probably already has Elixir installed.)
@@ -222,7 +222,7 @@ Which should list all files containing "JOSE":
 To view a list of all Hex packages with downloaded Hexdocs, run:
 
 ```
-mix run local_docs.exs list
+mix local_docs list
 ```
 
 Returns something like:
@@ -239,7 +239,7 @@ Packages downloaded in /home/user_name/.hex/docs/hexpm: ["abacus", "absinthe", "
 ### Listing all Hex package versions with downloaded documentation
 
 ```
-mix run local_docs.exs versions
+mix local_docs versions
 ```
 
 Returns something like:
@@ -263,7 +263,7 @@ Packages downloaded in /home/user_name/.hex/docs/hexpm: [
 ### Listing all Hex package versions with multiple versions of downloaded documentation
 
 ```
-mix run local_docs.exs multiple_versions
+mix local_docs multiple_versions
 ```
 Returns something like:
 ```
@@ -273,7 +273,7 @@ Packages downloaded in /home/user_name/.hex/docs/hexpm with multiple versions: [
 ### Removing older Hexdoc versions from packages with multiple versions
 
 ```
-mix run local_docs.exs to_clean
+mix local_docs to_clean
 ```
 Returns something like:
 ```
@@ -317,7 +317,7 @@ Packages with multiple Hexdocs versions in /home/user_name/.hex/docs/hexpm: [
 To delete the directories listed in `delete_dirs`, run:
 
 ```
-mix run local_docs.exs clean
+mix local_docs clean
 ```
 
 This should return:
@@ -337,19 +337,19 @@ This should return:
 Updating your local Hexdocs documentation is as simple as re-running:
 
 ```
-mix run local_docs.exs get
+mix local_docs get
 ```
 
 Each time you run this, `LocalHexdocs` will pull the latest version of documentation for each specified package.
 
 ## Automate the periodic running of local_hexdocs
 
-To ensure you always have the latest documentation, you can create a cron job to periodically run `mix run local_docs.exs get` (...but please don't run it too frequently or you'll needlessly hammer the Hexdocs.pm server).
+To ensure you always have the latest documentation, you can create a cron job to periodically run `mix local_docs get` (...but please don't run it too frequently or you'll needlessly hammer the Hexdocs.pm server).
 
 Before running a mix task via cron as a user, you may need to `cd` into your `local_hexdocs` directory and specify your `$PATH`. I use `.asdf`, and the following works for me on Fedora (which includes user cron jobs inside `/etc/crontab` but requires you to specify the user name... In Debian/Ubuntu, I instead used a user-specific cron file -- via `crontab -e` -- and did NOT specify the user_name in my cron file). The 5 below means 5 a.m. and the 0 specifies Sunday, so I run my job once per week:
 
 ```
-* 5 * * 0 user_name cd /home/user_name/Git/local_hexdocs; PATH=[YOUR_$PATH] /home/user_name/.asdf/shims/mix run /home/user_name/Git/local_hexdocs/local_docs.exs get_then_clean >> /home/user_name/local_hexdocs.log 2>&1
+* 5 * * 0 user_name cd /home/user_name/Git/local_hexdocs; PATH=[YOUR_$PATH] /home/user_name/.asdf/shims/mix local_docs get_then_clean >> /home/user_name/local_hexdocs.log 2>&1
 ```
 
 The command above directs all output to a log file, so if anything goes wrong, you can debug your problem. E.g.,
@@ -385,7 +385,7 @@ And, if things go well, you can see exactly what your script did:
 * I hit this just once. If it recurs, figure out how to handle it: "** (MatchError) no match of right hand side value: {:error, :eacces}\n    (hex 2.0.6) lib/mix/tasks/hex.docs.ex:377: Mix.Tasks.Hex.Docs.extract_docs/2\n    (mix 1.16.1) lib/mix/task.ex:478: anonymous fn/3 in Mix.Task.run_task/5\n    (mix 1.16.1) lib/mix/cli.ex:96: Mix.CLI.run_task/2\n    /Users/user_name/.asdf/installs/elixir/1.16.1-otp-26/bin/mix:2: (file)"
 * Recommend grep command that doesn't generate so many "grep: /home/.../.hex/docs/hexpm/mist/4.0.7/fonts/ubuntu-mono-v15-regular-latin.woff2: Permission denied"
 * Improve the new unified command-line API
-* `mix run local_docs.exs list` could display (perhaps optionally) the individual and total size of downloaded documentation
+* `mix local_docs list` could display (perhaps optionally) the individual and total size of downloaded documentation
 * Function for listing all desired packages without downloaded documentation
 * Option to load only the top-N popular packages from `popular_packages.txt`
 * Display "amqp_client/4.0.3" as "amqp_client (4.0.3)"?

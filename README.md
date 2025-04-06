@@ -344,9 +344,9 @@ OR
 mix local_docs get_then_clean   # to fetch the lastest documentation, then delete all outdated documentation
 ```
 
-Each time you run this, `LocalHexdocs` will pull the latest version of documentation for each specified package and for any downloaded documentation that's not at its most recent version.
+Each time you run this, `LocalHexdocs` will pull the latest version of documentation for each specified package AND any downloaded Hexdocs not at its most recent version.
 
-Fetching the newest version of any already downloaded Hexdocs package -- regardless of whether the package is listed in a `LocalHexdocs` package list -- ensures that all your downloaded documentation remains up to date.
+Fetching the newest package version of any already downloaded Hexdocs -- regardless of whether the package is listed in a `LocalHexdocs` package list -- ensures that all your downloaded Hexdocs remain up to date.
 
 To avoid filling your disk with outdated documentation, I recommend running either:
 ```
@@ -354,7 +354,7 @@ mix local_docs get_then_clean
 ```
 to automatically delete all outdated documentation after fetching the latest... OR...
 ```
-mix local_docs to_clean  # to see which documentation is considered outdated
+mix local_docs to_clean  # to see which packages' documentation is outdated
 
                          # THEN...
 

@@ -16,7 +16,7 @@ defmodule LocalHexdocs.Helpers do
       "./test/" |> Path.expand()
     else
       # script is executing normally
-      "~/" |> Path.expand()
+      "./" |> Path.expand()
     end
   end
 

@@ -39,10 +39,8 @@ defmodule LocalHexdocs do
 
   Called by `local_docs.exs list`
   """
-  def downloaded_packages do
-    hexpm_dir()
-    |> File.ls!()
-    |> Enum.sort()
+  def display_downloaded_packages do
+    downloaded_packages()
     |> IO.inspect(
       label: "Packages downloaded in #{hexpm_dir()}",
       limit: :infinity,
@@ -169,6 +167,12 @@ defmodule LocalHexdocs do
     end
   end
 
+  def downloaded_packages do
+    hexpm_dir()
+    |> File.ls!()
+    |> Enum.sort()
+  end
+
   defp package_name_plus_versions(name) do
     {name |> String.to_atom(), package_versions(name)}
   end
@@ -272,13 +276,20 @@ defmodule LocalHexdocs do
   end
 
   defp desired_packages do
-    packages_files()
-    |> Enum.flat_map(&extract_package_names/1)
+    # Explicitly requested packages + already downloaded packages
+    (requested_packages() ++ downloaded_packages())
     |> Enum.sort()
     |> Enum.uniq()
 
     # For testing:
     # |> Enum.take(10)
+  end
+
+  defp requested_packages do
+    packages_files()
+    |> Enum.flat_map(&extract_package_names/1)
+    |> Enum.sort()
+    |> Enum.uniq()
   end
 
   defp extract_package_names(filepath) do

@@ -373,6 +373,7 @@ And, if things go well, you can see exactly what your script did:
 
 ## Known issues & possible future features
 
+* Always fetch the newest version of any already downloaded Hexdocs package (regardless of whether the package is listed in a list of packages). This is useful for those relying on `popular_packages.ex` because packages will get added to and removed from that list over time.
 * Better handle versions with non-numeric version numbers (violating semantic versioning).
   * For now, I'm ignoring them when deciding which versions are redundant.
   * I need to add a test.

@@ -153,19 +153,21 @@ defmodule LocalDocsTest do
         delete: ["0.1.1", "1.1.1", "1.2.1", "1.2.3", "2.0.4", "2.1.1"],
         keep: "2.1.2",
         package: "elixir",
-        delete_dirs: [
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/0.1.1",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.1.1",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.2.1",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.2.3",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/2.0.4",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/2.1.1"
-        ]
+        delete_dirs:
+          [
+            "./test/.hex/docs/hexpm/elixir/0.1.1",
+            "./test/.hex/docs/hexpm/elixir/1.1.1",
+            "./test/.hex/docs/hexpm/elixir/1.2.1",
+            "./test/.hex/docs/hexpm/elixir/1.2.3",
+            "./test/.hex/docs/hexpm/elixir/2.0.4",
+            "./test/.hex/docs/hexpm/elixir/2.1.1"
+          ]
+          |> Enum.map(&Path.expand/1)
       }
     ]
 
     expected_output =
-      "Packages with multiple Hexdocs versions in /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm: [\n  %{\n    delete: [\"0.1.1\", \"1.1.1\", \"1.2.1\", \"1.2.3\", \"2.0.4\", \"2.1.1\"],\n    keep: \"2.1.2\",\n    package: \"elixir\",\n    delete_dirs: [\"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/0.1.1\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.1.1\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.2.1\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/1.2.3\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/2.0.4\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/elixir/2.1.1\"]\n  }\n]\n"
+      "Packages with multiple Hexdocs versions in #{File.cwd!()}/test/.hex/docs/hexpm: [\n  %{\n    delete: [\"0.1.1\", \"1.1.1\", \"1.2.1\", \"1.2.3\", \"2.0.4\", \"2.1.1\"],\n    keep: \"2.1.2\",\n    package: \"elixir\",\n    delete_dirs: [\"#{File.cwd!()}/test/.hex/docs/hexpm/elixir/0.1.1\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/elixir/1.1.1\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/elixir/1.2.1\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/elixir/1.2.3\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/elixir/2.0.4\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/elixir/2.1.1\"]\n  }\n]\n"
 
     {result, output} = with_io(fn -> LocalHexdocs.display_package_versions_to_remove() end)
 
@@ -191,23 +193,25 @@ defmodule LocalDocsTest do
     expected_result = [
       %{
         delete: ["3.1.99", "0.55.55", "1.1.1", "1.2.1", "1.2.3", "2.0.4", "2.11.2", "2.1.1"],
-        delete_dirs: [
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/3.1.99",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/0.55.55",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.1.1",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.1",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.3",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.0.4",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.11.2",
-          "/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.1.1"
-        ],
+        delete_dirs:
+          [
+            "./test/.hex/docs/hexpm/nx/3.1.99",
+            "./test/.hex/docs/hexpm/nx/0.55.55",
+            "./test/.hex/docs/hexpm/nx/1.1.1",
+            "./test/.hex/docs/hexpm/nx/1.2.1",
+            "./test/.hex/docs/hexpm/nx/1.2.3",
+            "./test/.hex/docs/hexpm/nx/2.0.4",
+            "./test/.hex/docs/hexpm/nx/2.11.2",
+            "./test/.hex/docs/hexpm/nx/2.1.1"
+          ]
+          |> Enum.map(&Path.expand/1),
         keep: "3.2.0",
         package: "nx"
       }
     ]
 
     expected_output =
-      "Packages with multiple Hexdocs versions in /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm: [\n  %{\n    delete: [\"3.1.99\", \"0.55.55\", \"1.1.1\", \"1.2.1\", \"1.2.3\", \"2.0.4\", \"2.11.2\",\n     \"2.1.1\"],\n    keep: \"3.2.0\",\n    package: \"nx\",\n    delete_dirs: [\"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/3.1.99\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/0.55.55\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.1.1\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.1\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.3\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.0.4\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.11.2\",\n     \"/home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.1.1\"]\n  }\n]\n"
+      "Packages with multiple Hexdocs versions in #{File.cwd!()}/test/.hex/docs/hexpm: [\n  %{\n    delete: [\"3.1.99\", \"0.55.55\", \"1.1.1\", \"1.2.1\", \"1.2.3\", \"2.0.4\", \"2.11.2\",\n     \"2.1.1\"],\n    keep: \"3.2.0\",\n    package: \"nx\",\n    delete_dirs: [\"#{File.cwd!()}/test/.hex/docs/hexpm/nx/3.1.99\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/nx/0.55.55\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/nx/1.1.1\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/nx/1.2.1\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/nx/1.2.3\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/nx/2.0.4\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/nx/2.11.2\",\n     \"#{File.cwd!()}/test/.hex/docs/hexpm/nx/2.1.1\"]\n  }\n]\n"
 
     {result, output} = with_io(fn -> LocalHexdocs.display_package_versions_to_remove() end)
 
@@ -219,7 +223,7 @@ defmodule LocalDocsTest do
     expected_result2 = :ok
 
     expected_output2 =
-      "\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/3.1.99\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/0.55.55\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.1.1\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.1\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/1.2.3\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.0.4\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.11.2\"\n\"Deleting /home/mateusz/Git/local_hexdocs/test/.hex/docs/hexpm/nx/2.1.1\"\n"
+      "\"Deleting #{File.cwd!()}/test/.hex/docs/hexpm/nx/3.1.99\"\n\"Deleting #{File.cwd!()}/test/.hex/docs/hexpm/nx/0.55.55\"\n\"Deleting #{File.cwd!()}/test/.hex/docs/hexpm/nx/1.1.1\"\n\"Deleting #{File.cwd!()}/test/.hex/docs/hexpm/nx/1.2.1\"\n\"Deleting #{File.cwd!()}/test/.hex/docs/hexpm/nx/1.2.3\"\n\"Deleting #{File.cwd!()}/test/.hex/docs/hexpm/nx/2.0.4\"\n\"Deleting #{File.cwd!()}/test/.hex/docs/hexpm/nx/2.11.2\"\n\"Deleting #{File.cwd!()}/test/.hex/docs/hexpm/nx/2.1.1\"\n"
 
     assert result2 == expected_result2
     assert output2 == expected_output2

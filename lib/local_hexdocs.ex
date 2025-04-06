@@ -16,8 +16,6 @@ defmodule LocalHexdocs do
 
   See [README.md](https://github.com/JamesLavin/local_hexdocs/blob/main/README.md) for more details
   """
-  Code.ensure_loaded!(LocalHexdocs.Helpers)
-
   import LocalHexdocs.Helpers
 
   # Number of parallel threads used to pull documentation. The higher this number,

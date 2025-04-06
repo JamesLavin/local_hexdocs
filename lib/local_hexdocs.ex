@@ -39,10 +39,8 @@ defmodule LocalHexdocs do
 
   Called by `local_docs.exs list`
   """
-  def downloaded_packages do
-    hexpm_dir()
-    |> File.ls!()
-    |> Enum.sort()
+  def display_downloaded_packages do
+    downloaded_packages()
     |> IO.inspect(
       label: "Packages downloaded in #{hexpm_dir()}",
       limit: :infinity,
@@ -167,6 +165,12 @@ defmodule LocalHexdocs do
       {:error, _err} ->
         packages_file_as_list()
     end
+  end
+
+  defp downloaded_packages do
+    hexpm_dir()
+    |> File.ls!()
+    |> Enum.sort()
   end
 
   defp package_name_plus_versions(name) do

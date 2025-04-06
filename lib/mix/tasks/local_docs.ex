@@ -11,7 +11,7 @@ defmodule Mix.Tasks.LocalDocs do
         LocalHexdocs.remove_stale_versions()
 
       ["list"] ->
-        LocalHexdocs.downloaded_packages()
+        LocalHexdocs.display_downloaded_packages()
 
       ["versions"] ->
         LocalHexdocs.display_downloaded_packages_with_versions()

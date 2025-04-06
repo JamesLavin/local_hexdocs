@@ -167,7 +167,7 @@ defmodule LocalHexdocs do
     end
   end
 
-  defp downloaded_packages do
+  def downloaded_packages do
     hexpm_dir()
     |> File.ls!()
     |> Enum.sort()

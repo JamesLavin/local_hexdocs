@@ -7,13 +7,14 @@ defmodule LocalDocsTest do
   use ExUnit.Case, async: false
 
   setup do
-    recreate_test_hexpm_dir()
+    clear_test_hexpm_dir()
     clear_test_package_files()
 
+    on_exit(fn ->
+      clear_test_hexpm_dir()
+    end)
+
     :ok
-    # on_exit(fn ->
-    #   clear_test_hex_packages()
-    # end)
   end
 
   test "mix_env is set to :test" do
@@ -45,7 +46,7 @@ defmodule LocalDocsTest do
     assert [LocalHexdocs.packages_files() |> Path.expand()] == [filepath |> Path.expand()]
 
     # delete test packages file
-    delete_file(filepath)
+    delete_file!(filepath)
   end
 
   test "packages_files are set correctly when user has created two packages files" do
@@ -62,11 +63,57 @@ defmodule LocalDocsTest do
              [filepath |> Path.expand(), filepath2 |> Path.expand()] |> Enum.sort()
 
     # delete test packages file
-    delete_file(filepath)
-    delete_file(filepath2)
+    delete_file!(filepath)
+    delete_file!(filepath2)
   end
 
-  test "gets Hexdocs for valid package names; doesn't re-fetch on 2nd get" do
+  test "if user hasn't configured /packages, it pulls packages listed in default_packages.txt" do
+    filepath = "./test/default_packages.txt"
+    packages = ["ecto_psql_extras", "ecto_sql", "ecto_sqlite3"]
+    content = packages |> Enum.join("\n")
+    create_file(filepath, content)
+
+    {result, output} = with_io(fn -> LocalHexdocs.fetch_all() end)
+
+    assert RSM.matches?(
+             %{
+               "Couldn't find docs" => [],
+               "Docs already fetched" => [],
+               "Docs fetched" => :any_list,
+               "No package with name" => []
+             },
+             result
+           )
+
+    docs_fetched = result["Docs fetched"]
+
+    Enum.all?(packages, fn p -> output =~ "\"Docs fetched: ./test/.hex/docs/hexpm/#{p}/" end)
+
+    assert output =~
+             "\"\n%{\n  \"Couldn't find docs\" => [],\n  \"Docs already fetched\" => [],\n  \"Docs fetched\" => [\""
+
+    assert output =~
+             "\"No package with name\" => []\n}\n"
+
+    assert LocalHexdocs.downloaded_packages() == ["ecto_psql_extras", "ecto_sql", "ecto_sqlite3"]
+
+    assert [
+             {:ecto_psql_extras, [extras_version]},
+             {:ecto_sql, [sql_version]},
+             {:ecto_sqlite3, [sqlite_version]}
+           ] =
+             LocalHexdocs.display_downloaded_packages_with_versions()
+
+    assert docs_fetched == [
+             "ecto_psql_extras/#{extras_version}",
+             "ecto_sql/#{sql_version}",
+             "ecto_sqlite3/#{sqlite_version}"
+           ]
+
+    empty_file!(filepath)
+  end
+
+  test "gets Hexdocs for valid package names; 2nd get says 'Docs already fetched'; 3rd get after deleting my_packages tries to update existing packages" do
     content = "elixir\nphoenix"
     filepath = "./test/packages/my_packages"
     create_file(filepath, content)
@@ -129,7 +176,29 @@ defmodule LocalDocsTest do
 
     assert [] = LocalHexdocs.display_package_versions_to_remove()
 
-    delete_file(filepath)
+    delete_file!(filepath)
+
+    {result3, output3} = with_io(fn -> LocalHexdocs.fetch_all() end)
+
+    assert RSM.matches?(
+             %{
+               "Couldn't find docs" => [],
+               "Docs already fetched" => :any_list,
+               "Docs fetched" => [],
+               "No package with name" => []
+             },
+             result3
+           )
+
+    assert docs_fetched_1 == result3["Docs already fetched"]
+
+    assert output3 ==
+             "\"Docs already fetched: ./test/.hex/docs/hexpm/elixir/#{elixir_version}\"\n\"Docs already fetched: ./test/.hex/docs/hexpm/phoenix/#{phoenix_version}\"\n%{\n  \"Couldn't find docs\" => [],\n  \"Docs already fetched\" => [\"elixir/#{elixir_version}\", \"phoenix/#{phoenix_version}\"],\n  \"Docs fetched\" => [],\n  \"No package with name\" => []\n}\n"
+
+    assert [{:elixir, [^elixir_version]}, {:phoenix, [^phoenix_version]}] =
+             LocalHexdocs.display_downloaded_packages_with_versions()
+
+    assert [] = LocalHexdocs.display_package_versions_to_remove()
   end
 
   test "display_package_versions_to_remove" do
@@ -250,16 +319,11 @@ defmodule LocalDocsTest do
     assert output ==
              "\"No package with name does_not_exist\"\n\"No package with name not_a_real_package\"\n%{\n  \"Couldn't find docs\" => [],\n  \"Docs already fetched\" => [],\n  \"Docs fetched\" => [],\n  \"No package with name\" => [\"does_not_exist\", \"not_a_real_package\"]\n}\n"
 
-    delete_file(filepath)
+    delete_file!(filepath)
   end
 
   @tag :skip
   test "ignores non-numeric package versions (that don't follow semantic versioning)" do
-  end
-
-  def recreate_test_hexpm_dir do
-    clear_test_hexpm_dir()
-    create_test_hexpm_dir()
   end
 
   def create_test_hexpm_dir do
@@ -270,8 +334,7 @@ defmodule LocalDocsTest do
 
   def clear_test_hexpm_dir do
     "./test/.hex/docs/hexpm"
-    |> Path.expand()
-    |> File.rm_rf()
+    |> empty_dir!()
   end
 
   def clear_test_package_files do
@@ -291,7 +354,22 @@ defmodule LocalDocsTest do
     |> File.write!(content)
   end
 
-  def delete_file(filepath) do
+  def empty_file!(filepath) do
+    filepath
+    |> Path.expand()
+    |> File.write!("")
+  end
+
+  def empty_dir!(dirpath) do
+    dirpath
+    |> Path.expand()
+    |> File.ls!()
+    |> Enum.map(fn filename -> Path.join(dirpath, filename) end)
+    |> Enum.map(&Path.expand/1)
+    |> Enum.map(&File.rm_rf!/1)
+  end
+
+  def delete_file!(filepath) do
     filepath
     |> Path.expand()
     |> File.rm!()

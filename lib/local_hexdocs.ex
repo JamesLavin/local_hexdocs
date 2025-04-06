@@ -276,13 +276,20 @@ defmodule LocalHexdocs do
   end
 
   defp desired_packages do
-    packages_files()
-    |> Enum.flat_map(&extract_package_names/1)
+    # Explicitly requested packages + already downloaded packages
+    (requested_packages() ++ downloaded_packages())
     |> Enum.sort()
     |> Enum.uniq()
 
     # For testing:
     # |> Enum.take(10)
+  end
+
+  defp requested_packages do
+    packages_files()
+    |> Enum.flat_map(&extract_package_names/1)
+    |> Enum.sort()
+    |> Enum.uniq()
   end
 
   defp extract_package_names(filepath) do

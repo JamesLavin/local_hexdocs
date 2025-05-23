@@ -59,7 +59,7 @@ defmodule LocalHexdocs do
     stream =
       desired_packages()
       |> Task.async_stream(
-        fn lib -> :os.cmd(~c(HEX_HOME=#{@hex_home} #{@mix_path} hex.docs fetch #{lib})) end,
+        fn lib -> :os.cmd(~c(HEX_HOME=#{@hex_home} #{@mix_path} hex.docs fetch --latest #{lib})) end,
         timeout: @timeout_ms,
         max_concurrency: @max_concurrency
       )
